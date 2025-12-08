@@ -14,7 +14,9 @@ import codeSage from './codesage.png'
 import demo from './demo.mp4'
 import hire from './hire.png'
 import hire2 from './hire2.png'
-
+import ffw from './ffw.png'
+import ffw2 from './ffw2.png'
+import workflow from './workflow.png'
 export const assets = {
- hire,hire2,demo,trackForge,codeSage,fitForWork,hero10,  hero1,hero2,hero3,hero4,hero5,hero6,hero7,hero9,hero8
+ workflow,hire,hire2,demo,trackForge,codeSage,fitForWork,hero10,  hero1,hero2,hero3,hero4,hero5,hero6,hero7,hero9,hero8,ffw,ffw2
 }

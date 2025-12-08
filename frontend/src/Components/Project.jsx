@@ -1,69 +1,103 @@
+import { motion } from "framer-motion";
 import { assets } from "../assets/assets";
 import ProjectCard from "./ProjectCard";
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
+// 1. Organize data in an array for cleaner code
+const projectsData = [
+  {
+    title: "TrackForge",
+    description: "A comprehensive bug tracking and project management tool designed for agile teams. Features include real-time analytics, role-based access control (RBAC), and intuitive kanban workflows.",
+    keywords: ["React", "Tailwind", "Node.js", "RBAC", "Recharts"],
+    meta: "SaaS Productivity Tool",
+    image: assets.trackForge,
+    video: assets.demo, // Optional: Add video if you have it
+    previewLink: null, // Set to null if not available
+    codeLink: "https://github.com/AnbCrafts/TrackForge.git",
+  },
+  {
+    title: "FitForWork",
+    description: "A streamlined hiring platform connecting recruiters with top talent. Includes a dual-dashboard system, resume parsing, and advanced candidate filtering algorithms.",
+    keywords: ["MERN Stack", "Redux", "JWT Auth", "Responsive UI"],
+    meta: "Recruitment Platform",
+    image: assets.fitForWork,
+    video: null,
+    previewLink: null,
+    codeLink: "https://github.com/AnbCrafts/FitFor-Work-updated.git",
+  },
+  {
+    title: "CodeSage",
+    description: "An AI-powered developer assistant that explains complex code snippets in plain English. Leverages Large Language Models (LLMs) to parse logic and optimize syntax in real-time.",
+    keywords: ["OpenAI API", "Express", "React", "Prompt Engineering"],
+    meta: "AI & Developer Tools",
+    image: assets.codeSage,
+    video: null,
+    previewLink: "https://codesage-client.onrender.com/",
+    codeLink: "#",
+  },
+];
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="w-full py-20 px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto mb-12">
-  <h2 className="text-3xl md:text-4xl font-semibold text-teal-700">
-    Featured Projects
-  </h2>
+    <section id="projects" className="relative w-full py-24 px-6 lg:px-8 bg-slate-50 overflow-hidden">
+      
+      {/* Background Decor (Optional) */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none" 
+           style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
+      </div>
 
-  <div className="w-20 h-[3px] bg-teal-600 mt-2 mb-6"></div>
+      <div className="max-w-7xl mx-auto relative z-10">
+        
+        {/* --- SECTION HEADER --- */}
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="inline-block py-1 px-3 rounded-full bg-teal-100 text-teal-700 text-sm font-bold tracking-wide border border-teal-200 mb-4">
+              PORTFOLIO
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+              Featured <span className="text-teal-600">Projects</span>
+            </h2>
+            <p className="text-lg text-slate-600 leading-relaxed">
+              A collection of meaningful products focused on clean user experience, 
+              scalable architecture, and real-world problem solving.
+            </p>
+          </motion.div>
+        </div>
 
-  <p className="text-gray-600 max-w-2xl">
-    A collection of the most meaningful products I’ve built — each focused on 
-    clean user experience, modern engineering practices, and scalable full-stack architecture. 
-    Here are a few highlights that showcase my capabilities across UI, backend, system design, 
-    and real-world problem solving.
-  </p>
-</div>
+        {/* --- PROJECT CARDS MAPPING --- */}
+        <div className="flex flex-col gap-8">
+          {projectsData.map((project, index) => (
+            // We pass the index here if you want to implement zig-zag logic inside the card later
+            <ProjectCard 
+              key={index} 
+              {...project} 
+            />
+          ))}
+        </div>
 
+        {/* --- BOTTOM CTA --- */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mt-20 flex justify-center"
+        >
+          <Link
+            to="/project-details"
+            className="group flex items-center gap-2 text-slate-500 font-medium text-lg hover:text-teal-600 transition-colors"
+          >
+            View complete project archive 
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </motion.div>
 
-      <ProjectCard
-        title="TrackForge"
-        description="A bug tracking and collaboration tool with analytics, RBAC, and modern UI workflows."
-        keywords={["MERN", "RBAC", "Analytics", "Tailwind", "React"]}
-        meta="Built for scalable team workflows."
-        image={assets.trackForge}
-        video={assets.demo}
-        previewLink=""
-        codeLink="https://github.com/AnbCrafts/TrackForge.git"
-      />
-
-      <ProjectCard
-        title="FitForWork"
-        description="A hiring & job management platform with recruiter dashboards and advanced filtering."
-        keywords={["React", "Node", "MongoDB", "Responsive UI"]}
-        meta="Dual-role system with profile & posting flows."
-        image={assets.fitForWork}
-        video={assets.demo}
-        previewLink=""
-        codeLink="https://github.com/AnbCrafts/FitFor-Work-updated.git"
-      />
-
-      <ProjectCard
-        title="CodeSage"
-        description="An AI-powered code explanation tool using Gemini/OpenAI APIs."
-        keywords={["AI", "LLM", "Express", "React"]}
-        meta="Built for real-time code parsing & optimization."
-        image={assets.codeSage}
-        video={assets.demo}
-        previewLink="https://codesage-client.onrender.com/"
-        codeLink="#"
-      />
-
-
-        <div className="max-w-7xl mx-auto mt-10 flex justify-center">
-  <a
-    href="/project-details"
-    className="text-teal-700 hover:text-teal-800 font-medium text-lg border-b-2 border-teal-200 pb-1 hover:border-teal-600 transition-all"
-  >
-    View all projects →
-  </a>
-</div>
-
+      </div>
     </section>
   );
 }
