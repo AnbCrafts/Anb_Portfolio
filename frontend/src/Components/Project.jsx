@@ -1,19 +1,20 @@
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import { assets } from "../assets/assets";
 import ProjectCard from "./ProjectCard";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-// 1. Organize data in an array for cleaner code
-const projectsData = [
+// Mock Fallback Data
+const projectsDataFallback = [
   {
     title: "TrackForge",
     description: "A comprehensive bug tracking and project management tool designed for agile teams. Features include real-time analytics, role-based access control (RBAC), and intuitive kanban workflows.",
     keywords: ["React", "Tailwind", "Node.js", "RBAC", "Recharts"],
     meta: "SaaS Productivity Tool",
     image: assets.trackForge,
-    video: assets.demo, // Optional: Add video if you have it
-    previewLink: null, // Set to null if not available
+    video: assets.demo,
+    previewLink: null,
     codeLink: "https://github.com/AnbCrafts/TrackForge.git",
   },
   {
@@ -39,16 +40,21 @@ const projectsData = [
 ];
 
 export default function ProjectsSection() {
+  const dbProjects = useSelector((state) => state.portfolio.projects);
+
+  // Filter featured projects from DB
+  const featuredDbProjects = dbProjects.filter((p) => p.featured || p.status === 'active');
+
+  const projectsList = featuredDbProjects.length > 0 ? featuredDbProjects : projectsDataFallback;
+
   return (
     <section id="projects" className="relative w-full py-24 px-6 lg:px-8 bg-slate-50 overflow-hidden">
-      
-      {/* Background Decor (Optional) */}
+      {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none" 
            style={{ backgroundImage: 'radial-gradient(#cbd5e1 1px, transparent 1px)', backgroundSize: '30px 30px' }}>
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
         {/* --- SECTION HEADER --- */}
         <div className="text-center max-w-3xl mx-auto mb-20">
           <motion.div
@@ -72,11 +78,17 @@ export default function ProjectsSection() {
 
         {/* --- PROJECT CARDS MAPPING --- */}
         <div className="flex flex-col gap-8">
-          {projectsData.map((project, index) => (
-            // We pass the index here if you want to implement zig-zag logic inside the card later
+          {projectsList.map((project, index) => (
             <ProjectCard 
               key={index} 
-              {...project} 
+              title={project.title}
+              description={project.description || project.desc}
+              keywords={project.techStack || project.keywords}
+              meta={project.meta || (project.category === 'fullstack' ? 'Full Stack Project' : project.category === 'frontend' ? 'Frontend Project' : 'Featured Project')}
+              image={project.thumbnail || project.image}
+              video={project.demoVideo || project.video}
+              previewLink={project.liveUrl || project.previewLink}
+              codeLink={project.githubUrl || project.codeLink}
             />
           ))}
         </div>
@@ -96,7 +108,6 @@ export default function ProjectsSection() {
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </motion.div>
-
       </div>
     </section>
   );

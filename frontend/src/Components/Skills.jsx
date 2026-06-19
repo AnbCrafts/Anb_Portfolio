@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import {
-  Code2,
   Layout,
   Server,
   Database,
   Terminal,
 } from "lucide-react";
 
-// Added distinct colors for each category to aid visual separation
-const skillGroups = [
+const skillGroupsFallback = [
   {
     title: "Frontend Development",
     icon: <Layout size={24} className="text-blue-500" />,
@@ -39,7 +38,33 @@ const skillGroups = [
   },
 ];
 
-// Color mapping for dynamic badge styling
+const categoryConfigs = {
+  'Frontend': {
+    title: "Frontend Development",
+    icon: <Layout size={24} className="text-blue-500" />,
+    description: "Building responsive, accessible UIs",
+    color: "blue",
+  },
+  'Backend': {
+    title: "Backend Architecture",
+    icon: <Server size={24} className="text-emerald-500" />,
+    description: "Scalable APIs & server-side logic",
+    color: "emerald",
+  },
+  'Database': {
+    title: "Database Management",
+    icon: <Database size={24} className="text-purple-500" />,
+    description: "Optimized data storage & schemas",
+    color: "purple",
+  },
+  'DevOps & Tools': {
+    title: "DevOps & Tools",
+    icon: <Terminal size={24} className="text-orange-500" />,
+    description: "Version control & deployment",
+    color: "orange",
+  },
+};
+
 const colorMap = {
   blue: "bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100",
   emerald: "bg-emerald-50 text-emerald-700 border-emerald-100 hover:bg-emerald-100",
@@ -48,14 +73,29 @@ const colorMap = {
 };
 
 export default function SkillsSection() {
+  const dbSkills = useSelector((state) => state.portfolio.skills);
+
+  // Group dynamic database skills
+  const groupedDbSkills = Object.keys(categoryConfigs).map((cat) => {
+    const catSkills = dbSkills
+      .filter((s) => s.category === cat)
+      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
+      .map((s) => s.name);
+    return {
+      ...categoryConfigs[cat],
+      skills: catSkills,
+    };
+  }).filter((g) => g.skills.length > 0);
+
+  // Choose dynamic list or mock fallback
+  const skillGroups = groupedDbSkills.length > 0 ? groupedDbSkills : skillGroupsFallback;
+
   return (
     <section id="skills" className="relative w-full py-24 px-6 overflow-hidden bg-white">
-      
-      {/* 1. Subtle Background Decor (Top Right) */}
+      {/* Subtle Background Decor */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-50/50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
       
       <div className="max-w-7xl mx-auto">
-        
         {/* HEADER */}
         <div className="text-center mb-16">
           <motion.h2 
@@ -89,11 +129,10 @@ export default function SkillsSection() {
               whileHover={{ y: -5 }}
               className="group relative bg-white border border-slate-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300"
             >
-              
               {/* Header inside Card */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className={`p-3 rounded-xl bg-slate-50 group-hover:bg-white group-hover:shadow-md transition-all duration-300 ring-1 ring-slate-100`}>
+                  <div className="p-3 rounded-xl bg-slate-50 group-hover:bg-white group-hover:shadow-md transition-all duration-300 ring-1 ring-slate-100">
                     {group.icon}
                   </div>
                   <div>
@@ -124,11 +163,9 @@ export default function SkillsSection() {
                   </span>
                 ))}
               </div>
-
             </motion.div>
           ))}
         </div>
-        
       </div>
     </section>
   );

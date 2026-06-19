@@ -1,19 +1,30 @@
-// TestimonialSection.jsx
 import { Quote } from "lucide-react";
+import { useSelector } from "react-redux";
+
+const reviewsFallback = [
+  {
+    text: "Anubhaw is one of the most dedicated developers I've worked with. His ability to solve complex backend logic during our Hackathon was impressive.",
+    name: "Teammate Name",
+    role: "Hackathon Peer",
+  },
+  {
+    text: "He consistently writes clean, maintainable code and picks up new technologies incredibly fast.",
+    name: "Mentor Name",
+    role: "Senior Developer",
+  }
+];
 
 export default function Testimonials() {
-  const reviews = [
-    {
-      text: "Anubhaw is one of the most dedicated developers I've worked with. His ability to solve complex backend logic during our Hackathon was impressive.",
-      name: "Teammate Name",
-      role: "Hackathon Peer",
-    },
-    {
-      text: "He consistently writes clean, maintainable code and picks up new technologies incredibly fast.",
-      name: "Mentor Name",
-      role: "Senior Developer",
-    }
-  ];
+  const dbTestimonials = useSelector((state) => state.portfolio.testimonials);
+
+  // Map database reviews
+  const mappedDbTestimonials = dbTestimonials.map((t) => ({
+    text: t.message,
+    name: t.name,
+    role: t.company ? `${t.role} at ${t.company}` : t.role,
+  }));
+
+  const reviews = mappedDbTestimonials.length > 0 ? mappedDbTestimonials : reviewsFallback;
 
   return (
     <section className="py-20 px-6 max-w-7xl mx-auto">

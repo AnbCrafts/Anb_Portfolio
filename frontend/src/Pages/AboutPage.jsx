@@ -1,5 +1,5 @@
-// AboutPage.jsx
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 import { 
@@ -16,8 +16,96 @@ import {
 } from "lucide-react";
 import AboutBottom from "../Components/AboutBottom";
 
+// Fallback Mock Data
+const educationFallback = [
+  {
+    title: "B.Tech in CSE",
+    school: "JIS College of Engineering",
+    year: "2022 – 2026",
+    desc: "Specializing in Computer Science. Active member of the coding club and tech fest committee.",
+    color: "border-teal-500"
+  },
+  {
+    title: "Higher Secondary (PCM)",
+    school: "DR. BR Ambedkar College",
+    year: "2021 – 2023",
+    desc: "Focused on Physics, Chemistry, and Mathematics. Built strong logic and analytical skills.",
+    color: "border-blue-500"
+  },
+  {
+    title: "Matriculation",
+    school: "Roy Academy",
+    year: "2019 – 2020",
+    desc: "Graduated with distinction. Developed an early interest in computer applications.",
+    color: "border-purple-500"
+  }
+];
+
+const achievementsFallback = [
+  {
+    title: "Hack-o-Nova Hackathon",
+    desc: "Built and deployed an AI-powered study planner in 36 hours. Secured position among top finalists.",
+    icon: "🏆"
+  },
+  {
+    title: "NPTEL Certification",
+    desc: "Elite Silver certification in Java Programming. Scored in the top 5% of candidates nationwide.",
+    icon: "📜"
+  },
+  {
+    title: "MERN Training",
+    desc: "Completed intensive industrial training at Ardent Computech. Built 3 production-ready apps.",
+    icon: "🎓"
+  }
+];
+
+const borderColors = ["border-teal-500", "border-blue-500", "border-purple-500", "border-orange-500"];
+const iconMapping = {
+  "achievement": "🏆",
+  "education": "🎓",
+  "work": "💼"
+};
+
 export default function AboutPage() {
-  
+  const experiences = useSelector((state) => state.portfolio.experience);
+  const settings = useSelector((state) => state.portfolio.settings);
+  const activeResume = useSelector((state) => state.portfolio.activeResume);
+  const skills = useSelector((state) => state.portfolio.skills);
+
+  // Group education from DB
+  const dbEducation = experiences
+    .filter((e) => e.type === "education")
+    .sort((a, b) => (b.displayOrder || 0) - (a.displayOrder || 0))
+    .map((edu, idx) => ({
+      title: edu.title,
+      school: edu.company,
+      year: edu.year,
+      desc: edu.desc,
+      color: borderColors[idx % borderColors.length],
+    }));
+
+  const educationList = dbEducation.length > 0 ? dbEducation : educationFallback;
+
+  // Group achievements from DB
+  const dbAchievements = experiences
+    .filter((e) => e.type === "achievement")
+    .sort((a, b) => (b.displayOrder || 0) - (a.displayOrder || 0))
+    .map((ach) => ({
+      title: ach.title,
+      desc: ach.desc,
+      icon: iconMapping[ach.type] || "🏆",
+    }));
+
+  const achievementsList = dbAchievements.length > 0 ? dbAchievements : achievementsFallback;
+
+  // Group skills into category-like blocks for technical arsenal section
+  const frontendSkills = skills.filter(s => s.category === 'Frontend').map(s => s.name);
+  const backendSkills = skills.filter(s => s.category === 'Backend').map(s => s.name);
+  const toolsSkills = skills.filter(s => s.category === 'DevOps & Tools' || s.category === 'Database').map(s => s.name);
+
+  // Resume Download link
+  const resumeUrl = activeResume?.fileUrl || "/resume.pdf";
+
   // Animation Stagger
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,18 +122,15 @@ export default function AboutPage() {
 
   return (
     <main className="w-full bg-white overflow-hidden">
-      
       {/* ===========================
           HERO SECTION
       ============================ */}
       <section className="relative pt-32 pb-20 px-6 lg:px-8 bg-slate-50">
-        {/* Background Pattern */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
              style={{ backgroundImage: 'radial-gradient(#0f172a 1px, transparent 1px)', backgroundSize: '24px 24px' }}>
         </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
-          
           {/* LEFT: TEXT */}
           <motion.div 
             initial={{ opacity: 0, x: -30 }}
@@ -73,26 +158,26 @@ export default function AboutPage() {
             {/* Quick Stats / Info */}
             <div className="flex flex-wrap gap-6 text-sm font-medium text-slate-500 mb-8">
               <div className="flex items-center gap-2">
-                <MapPin size={18} className="text-teal-500" /> Kolkata, India
+                <MapPin size={18} className="text-teal-500" /> {settings?.location || "Kolkata, India"}
               </div>
               <div className="flex items-center gap-2">
                 <Calendar size={18} className="text-teal-500" /> Born in 2004
               </div>
               <div className="flex items-center gap-2">
-                <Mail size={18} className="text-teal-500" /> Open to Work
+                <Mail size={18} className="text-teal-500" /> {settings?.email || "Open to Work"}
               </div>
             </div>
 
             <div className="flex flex-wrap gap-4">
               <a
-                href="/resume.pdf"
-                download
+                href={resumeUrl}
+                download="Anubhaw_Gupta_Resume.pdf"
                 className="inline-flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-xl font-medium hover:bg-teal-600 transition-all shadow-lg shadow-slate-900/20"
               >
                 <Download size={18} /> Download CV
               </a>
               <Link
-                to="/hire" // Changed from /contact to /hire to match previous route
+                to="/hire"
                 className="inline-flex items-center gap-2 px-6 py-3 border border-slate-200 text-slate-700 rounded-xl font-medium hover:bg-white hover:border-teal-300 hover:text-teal-700 transition-all"
               >
                 Hire Me
@@ -107,7 +192,6 @@ export default function AboutPage() {
             transition={{ duration: 0.7 }}
             className="flex justify-center lg:justify-end relative"
           >
-            {/* Abstract blobs behind image */}
             <div className="absolute top-10 right-10 w-64 h-64 bg-teal-200 rounded-full blur-[80px] opacity-40 -z-10" />
             <div className="absolute bottom-10 left-10 w-64 h-64 bg-blue-200 rounded-full blur-[80px] opacity-40 -z-10" />
 
@@ -122,7 +206,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      
       {/* ===========================
           BIO / PHILOSOPHY
       ============================ */}
@@ -137,9 +220,8 @@ export default function AboutPage() {
         </p>
       </section>
 
-
       {/* ===========================
-          EDUCATION
+          EDUCATION JOURNEY
       ============================ */}
       <section className="bg-slate-50 py-24 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -149,29 +231,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "B.Tech in CSE",
-                school: "JIS College of Engineering",
-                year: "2022 – 2026",
-                desc: "Specializing in Computer Science. Active member of the coding club and tech fest committee.",
-                color: "border-teal-500"
-              },
-              {
-                title: "Higher Secondary (PCM)",
-                school: "DR. BR Ambedkar College",
-                year: "2021 – 2023",
-                desc: "Focused on Physics, Chemistry, and Mathematics. Built strong logic and analytical skills.",
-                color: "border-blue-500"
-              },
-              {
-                title: "Matriculation",
-                school: "Roy Academy",
-                year: "2019 – 2020",
-                desc: "Graduated with distinction. Developed an early interest in computer applications.",
-                color: "border-purple-500"
-              }
-            ].map((edu, i) => (
+            {educationList.map((edu, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
@@ -190,9 +250,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ===========================
-          SKILLS MATRIX
+          TECHNICAL ARSENAL
       ============================ */}
       <section className="py-24 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -215,7 +274,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold text-slate-800 mb-4">Frontend</h3>
               <div className="flex flex-wrap gap-2">
-                {["React.js", "Next.js", "Tailwind CSS", "Framer Motion", "Redux", "HTML5/CSS3"].map(skill => (
+                {(frontendSkills.length > 0 ? frontendSkills : ["React.js", "Next.js", "Tailwind CSS", "Framer Motion", "Redux", "HTML5/CSS3"]).map(skill => (
                   <span key={skill} className="px-3 py-1 bg-white border border-slate-200 text-slate-600 text-sm rounded-md shadow-sm">
                     {skill}
                   </span>
@@ -230,7 +289,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold text-slate-800 mb-4">Backend</h3>
               <div className="flex flex-wrap gap-2">
-                {["Node.js", "Express", "MongoDB", "Mongoose", "JWT Auth", "REST APIs"].map(skill => (
+                {(backendSkills.length > 0 ? backendSkills : ["Node.js", "Express", "MongoDB", "Mongoose", "JWT Auth", "REST APIs"]).map(skill => (
                   <span key={skill} className="px-3 py-1 bg-white border border-slate-200 text-slate-600 text-sm rounded-md shadow-sm">
                     {skill}
                   </span>
@@ -245,7 +304,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold text-slate-800 mb-4">Tools & DevOps</h3>
               <div className="flex flex-wrap gap-2">
-                {["Git & GitHub", "Docker", "Postman", "VS Code", "Figma", "Vercel"].map(skill => (
+                {(toolsSkills.length > 0 ? toolsSkills : ["Git & GitHub", "Docker", "Postman", "VS Code", "Figma", "Vercel"]).map(skill => (
                   <span key={skill} className="px-3 py-1 bg-white border border-slate-200 text-slate-600 text-sm rounded-md shadow-sm">
                     {skill}
                   </span>
@@ -256,9 +315,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-
       {/* ===========================
-          ACHIEVEMENTS
+          ACHIEVEMENTS / KEY MILESTONES
       ============================ */}
       <section className="bg-slate-900 text-white py-24 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
@@ -268,23 +326,7 @@ export default function AboutPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                title: "Hack-o-Nova Hackathon",
-                desc: "Built and deployed an AI-powered study planner in 36 hours. Secured position among top finalists.",
-                icon: "🏆"
-              },
-              {
-                title: "NPTEL Certification",
-                desc: "Elite Silver certification in Java Programming. Scored in the top 5% of candidates nationwide.",
-                icon: "📜"
-              },
-              {
-                title: "MERN Training",
-                desc: "Completed intensive industrial training at Ardent Computech. Built 3 production-ready apps.",
-                icon: "🎓"
-              }
-            ].map((ach, i) => (
+            {achievementsList.map((ach, i) => (
               <motion.div
                 key={i}
                 whileHover={{ y: -5 }}
@@ -299,16 +341,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-
-      {/* ===========================
-          BOTTOM COMPONENT
-      ============================ */}
+      {/* BOTTOM COMPONENT */}
       <AboutBottom />
 
-
-      {/* ===========================
-          FINAL CTA
-      ============================ */}
+      {/* FINAL CTA */}
       <section className="py-24 px-6 text-center">
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
@@ -331,7 +367,6 @@ export default function AboutPage() {
           </Link>
         </motion.div>
       </section>
-
     </main>
   );
 }

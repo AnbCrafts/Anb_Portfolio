@@ -12,46 +12,52 @@ export default function ContactSection() {
     e.preventDefault();
     setIsSending(true);
 
-    // Replace these strings with your actual IDs from EmailJS dashboard
-    // Service ID, Template ID, Public Key (Account > API Keys)
-    emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,   // Updated
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,  // Updated
+    // 1. Send Notification to YOU (The Portfolio Owner)
+    const sendNotification = emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
       formRef.current,
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY     
-      )
-      .then(
-        (result) => {
-          setIsSending(false);
-          toast.success("Message sent successfully!", {
-            style: {
-              background: "#134e4a", // Teal-900
-              color: "#fff",
-            },
-          });
-          e.target.reset(); // Clear form
-        },
-        (error) => {
-          setIsSending(false);
-          toast.error("Failed to send. Please try again later.", {
-             style: {
-              background: "#7f1d1d", // Red-900
-              color: "#fff",
-            },
-          });
-          console.error(error.text);
-        }
-      );
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+
+    // 2. Send Auto-Reply to THE VISITOR
+    const sendAutoReply = emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_AUTOREPLY_EMAILJS_TEMPLATE_ID, // Use the new env variable
+      formRef.current,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+
+    // Wait for BOTH emails to send before showing success
+    Promise.all([sendNotification, sendAutoReply])
+      .then(() => {
+        setIsSending(false);
+        toast.success("Message sent successfully! Check your inbox for a confirmation.", {
+          style: {
+            background: "#134e4a", // Teal-900
+            color: "#fff",
+          },
+        });
+        e.target.reset(); // Clear form
+      })
+      .catch((error) => {
+        setIsSending(false);
+        toast.error("Failed to send message. Please try again later.", {
+          style: {
+            background: "#7f1d1d", // Red-900
+            color: "#fff",
+          },
+        });
+        console.error("EmailJS Error:", error);
+      });
   };
 
-  // ... (Social links logic remains the same)
   const socialLinks = [
     {
       name: "Email",
       value: "anubhawg.cse.jisu22@gmail.com", 
       icon: <Mail size={20} />,
-      href: "anubhawg.cse.jisu22@gmail.com",
+      href: "mailto:anubhawg.cse.jisu22@gmail.com",
       color: "hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50",
     },
     {
@@ -88,7 +94,6 @@ export default function ContactSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          {/* ... (Same text content as before) ... */}
            <div className="flex items-center gap-2 mb-6">
              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
              <span className="text-sm font-semibold text-teal-600 tracking-wide uppercase">Available for work</span>

@@ -1,15 +1,15 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Eye, Download } from "lucide-react";
 
-
-
-
 const ResumeDropDown = () => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const activeResume = useSelector((state) => state.portfolio.activeResume);
+  const resumeUrl = activeResume?.fileUrl || "/CV.pdf";
+
   return (
-     <div className="relative inline-block text-left z-20">
-      
+    <div className="relative inline-block text-left z-20">
       {/* MAIN BUTTON */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
@@ -26,7 +26,7 @@ const ResumeDropDown = () => {
         </motion.span>
       </motion.button>
 
-      {/* CLICK OUTSIDE OVERLAY (Transparent backdrop to close menu when clicking away) */}
+      {/* CLICK OUTSIDE OVERLAY */}
       {isOpen && (
         <div 
           className="fixed inset-0 z-10 bg-transparent" 
@@ -45,10 +45,9 @@ const ResumeDropDown = () => {
             className="absolute right-0 sm:left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden z-30"
           >
             <div className="flex flex-col p-1">
-              
-              {/* OPTION 1: VIEW (New Tab) */}
+              {/* OPTION 1: VIEW */}
               <a
-                href="/CV.pdf" // Ensure this matches your file name in public folder
+                href={resumeUrl}
                 target="_blank"
                 rel="noreferrer"
                 onClick={() => setIsOpen(false)}
@@ -59,20 +58,19 @@ const ResumeDropDown = () => {
 
               {/* OPTION 2: DOWNLOAD */}
               <a
-                href="/CV.pdf"
-                download="Anubhaw_Gupta_Resume.pdf" // Desired filename for the user
+                href={resumeUrl}
+                download={activeResume?.title ? `${activeResume.title}.pdf` : "Anubhaw_Gupta_Resume.pdf"}
                 onClick={() => setIsOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 text-sm text-slate-600 hover:bg-teal-50 hover:text-teal-700 rounded-lg transition-colors"
               >
                 <Download size={16} /> Download
               </a>
-
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </div>
-  )
-}
+  );
+};
 
-export default ResumeDropDown
+export default ResumeDropDown;

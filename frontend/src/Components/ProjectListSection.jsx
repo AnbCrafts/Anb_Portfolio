@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { frontend } from "../DB/FrontendProjects"; 
 import { fullstack } from "../DB/FullStackProjects";
@@ -6,14 +7,17 @@ import ProjectCardSmall from "./ProjectCardSmall";
 import { FolderOpen } from "lucide-react";
 
 export default function ProjectListSection({ type }) {
-  // 1. THIS STATE WAS MISSING
   const [expandedIndex, setExpandedIndex] = useState(null);
+  const dbProjects = useSelector((state) => state.portfolio.projects);
 
-  const list = type === "frontend" ? frontend : fullstack;
+  // Filter projects by category type
+  const catDbProjects = dbProjects.filter((p) => p.category === type);
+
+  // Choose list
+  const list = catDbProjects.length > 0 ? catDbProjects : (type === "frontend" ? frontend : fullstack);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 lg:px-8">
-      
       <motion.div 
         layout
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
@@ -22,13 +26,10 @@ export default function ProjectListSection({ type }) {
           {list && list.length > 0 ? (
             list.map((project, i) => (
               <ProjectCardSmall
-                key={i}
+                key={project._id || i}
                 project={project}
-                
-                // 2. PASSING THE STATE DOWN
                 expanded={expandedIndex === i}
                 onExpand={() => setExpandedIndex(expandedIndex === i ? null : i)}
-                
                 index={i}
               />
             ))

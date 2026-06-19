@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { 
   Mail, 
@@ -11,11 +12,60 @@ import {
   Zap,
   Clock,
   Briefcase,
-  Layers
+  Layers,
+  Loader2 // Added Loader icon
 } from "lucide-react";
 import { assets } from "../assets/assets";
+import emailjs from "@emailjs/browser";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function HireMe() {
+  const formRef = useRef();
+  const [isSending, setIsSending] = useState(false);
+
+  // --- MAIL LOGIC (Identical to ContactSection) ---
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setIsSending(true);
+
+    // 1. Send Notification to YOU
+    const sendNotification = emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      formRef.current,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+
+    // 2. Send Auto-Reply to VISITOR
+    const sendAutoReply = emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_AUTOREPLY_EMAILJS_TEMPLATE_ID,
+      formRef.current,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    );
+
+    Promise.all([sendNotification, sendAutoReply])
+      .then(() => {
+        setIsSending(false);
+        toast.success("Inquiry sent! I'll get back to you within 24h.", {
+          style: {
+            background: "#0f172a", // Slate-900 (Matches theme)
+            color: "#fff",
+          },
+        });
+        e.target.reset();
+      })
+      .catch((error) => {
+        setIsSending(false);
+        toast.error("Failed to send. Please try again or email directly.", {
+          style: {
+            background: "#7f1d1d",
+            color: "#fff",
+          },
+        });
+        console.error("EmailJS Error:", error);
+      });
+  };
 
   // Animation Stagger
   const containerVariants = {
@@ -33,16 +83,17 @@ export default function HireMe() {
 
   return (
     <div className="w-full bg-white font-sans selection:bg-teal-100 selection:text-teal-900">
+      
+      {/* Toast Notification */}
+      <Toaster position="bottom-right" reverseOrder={false} />
 
       {/* ================= HERO SECTION ================= */}
       <section className="relative py-24 px-6 lg:px-8 bg-slate-50 overflow-hidden">
-        
-        {/* Abstract Background Elements */}
+        {/* ... (Hero Background & Content remains exactly the same as previous design) ... */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-teal-50 rounded-full blur-3xl opacity-60 -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-50 rounded-full blur-3xl opacity-60 translate-y-1/3 -translate-x-1/3" />
 
         <div className="relative max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          
           {/* LEFT: Copy */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -75,7 +126,7 @@ export default function HireMe() {
                 Start a Project <ArrowRight size={18} />
               </a>
               <a
-                href="mailto:yourmail@gmail.com"
+                href="mailto:anubhawg.cse.jisu22@gmail.com"
                 className="inline-flex items-center gap-2 bg-white text-slate-700 border border-slate-200 px-8 py-3.5 rounded-xl font-semibold hover:bg-slate-50 transition-all"
               >
                 <Mail size={18} /> Email Me
@@ -83,16 +134,14 @@ export default function HireMe() {
             </div>
           </motion.div>
 
-          {/* RIGHT: Visual (Illustration or Abstract UI) */}
+          {/* RIGHT: Visual */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7 }}
             className="hidden lg:flex justify-center relative"
           >
-             {/* Decorative blob behind image */}
              <div className="absolute inset-0 bg-gradient-to-tr from-teal-200 to-blue-200 rounded-full blur-[60px] opacity-30" />
-             
              <img
                src={assets.hire} 
                alt="Collaboration"
@@ -106,7 +155,6 @@ export default function HireMe() {
       {/* ================= SERVICES GRID ================= */}
       <section className="py-24 px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-900">
               Technical <span className="text-teal-600">Capabilities</span>
@@ -124,36 +172,12 @@ export default function HireMe() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {[
-              {
-                icon: <Layout className="text-blue-500" />,
-                title: "Full-Stack Web Apps",
-                desc: "End-to-end MERN applications with authentication, databases, and responsive UI.",
-              },
-              {
-                icon: <Code className="text-teal-500" />,
-                title: "Frontend Development",
-                desc: "Pixel-perfect implementations using React, Tailwind CSS, and Framer Motion.",
-              },
-              {
-                icon: <Server className="text-purple-500" />,
-                title: "Backend API Design",
-                desc: "Scalable Node.js/Express APIs with secure authentication and optimized database queries.",
-              },
-              {
-                icon: <Zap className="text-amber-500" />,
-                title: "Performance Tuning",
-                desc: "Optimizing load times, fixing bugs, and refactoring legacy code for better speed.",
-              },
-              {
-                icon: <Database className="text-emerald-500" />,
-                title: "Database Architecture",
-                desc: "Designing efficient schemas in MongoDB or SQL for scalable data management.",
-              },
-              {
-                icon: <Smartphone className="text-indigo-500" />,
-                title: "Responsive Design",
-                desc: "Ensuring your product looks and works perfectly on every device, from mobile to desktop.",
-              },
+              { icon: <Layout className="text-blue-500" />, title: "Full-Stack Web Apps", desc: "End-to-end MERN applications with authentication, databases, and responsive UI." },
+              { icon: <Code className="text-teal-500" />, title: "Frontend Development", desc: "Pixel-perfect implementations using React, Tailwind CSS, and Framer Motion." },
+              { icon: <Server className="text-purple-500" />, title: "Backend API Design", desc: "Scalable Node.js/Express APIs with secure authentication and optimized database queries." },
+              { icon: <Zap className="text-amber-500" />, title: "Performance Tuning", desc: "Optimizing load times, fixing bugs, and refactoring legacy code for better speed." },
+              { icon: <Database className="text-emerald-500" />, title: "Database Architecture", desc: "Designing efficient schemas in MongoDB or SQL for scalable data management." },
+              { icon: <Smartphone className="text-indigo-500" />, title: "Responsive Design", desc: "Ensuring your product looks and works perfectly on every device, from mobile to desktop." },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -183,25 +207,16 @@ export default function HireMe() {
             
             {/* Left: Why Me */}
             <div>
-               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                 Why partner with me?
-               </h2>
+               <h2 className="text-3xl md:text-4xl font-bold mb-6">Why partner with me?</h2>
                <p className="text-slate-400 text-lg mb-10 leading-relaxed">
                  I bridge the gap between complex engineering and intuitive user experience. 
                  When you hire me, you get transparency, speed, and code that scales.
                </p>
 
                <div className="space-y-6">
-                 {[
-                   "Direct communication & daily updates",
-                   "Clean, documented, and maintainable code",
-                   "Focus on business metrics & user conversion",
-                   "Post-launch support & reliability"
-                 ].map((item, i) => (
+                 {["Direct communication & daily updates", "Clean, documented, and maintainable code", "Focus on business metrics & user conversion", "Post-launch support & reliability"].map((item, i) => (
                    <div key={i} className="flex items-center gap-4">
-                      <div className="p-1 rounded-full bg-teal-500/20 text-teal-400">
-                        <CheckCircle2 size={20} />
-                      </div>
+                      <div className="p-1 rounded-full bg-teal-500/20 text-teal-400"><CheckCircle2 size={20} /></div>
                       <span className="text-lg font-medium">{item}</span>
                    </div>
                  ))}
@@ -223,7 +238,6 @@ export default function HireMe() {
                  </div>
                ))}
             </div>
-
         </div>
       </section>
 
@@ -237,15 +251,13 @@ export default function HireMe() {
              <div className="bg-slate-900 p-10 text-white flex flex-col justify-between">
                 <div>
                   <h3 className="text-2xl font-bold mb-4">Let's Talk</h3>
-                  <p className="text-slate-400 mb-8">
-                    Fill out the form and I'll get back to you within 24 hours.
-                  </p>
+                  <p className="text-slate-400 mb-8">Fill out the form and I'll get back to you within 24 hours.</p>
                 </div>
                 
                 <div className="space-y-6 text-sm">
                    <div>
                      <p className="text-slate-500 uppercase text-xs font-bold tracking-wider mb-1">Email</p>
-                     <p className="font-medium">anubhaw@example.com</p>
+                     <p className="font-medium">anubhawg.cse.jisu22@gmail.com</p>
                    </div>
                    <div>
                      <p className="text-slate-500 uppercase text-xs font-bold tracking-wider mb-1">Location</p>
@@ -256,36 +268,47 @@ export default function HireMe() {
 
              {/* Right: The Form */}
              <div className="p-10 lg:p-12">
-               <form className="space-y-6">
+               <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
-                      <input type="text" className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all" placeholder="John Doe" />
+                      <input name="user_name" type="text" required className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all" placeholder="John Doe" />
                     </div>
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
-                      <input type="email" className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all" placeholder="john@company.com" />
+                      <input name="user_email" type="email" required className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition-all" placeholder="john@company.com" />
                     </div>
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Project Type</label>
-                    <select className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition-all text-slate-600">
-                      <option>Select a service...</option>
-                      <option>Full-Stack Development</option>
-                      <option>Frontend UI/UX</option>
-                      <option>Backend/API</option>
-                      <option>Consultation</option>
+                    <select name="project_type" className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition-all text-slate-600">
+                      <option value="Select a service...">Select a service...</option>
+                      <option value="Full-Stack Development">Full-Stack Development</option>
+                      <option value="Frontend UI/UX">Frontend UI/UX</option>
+                      <option value="Backend/API">Backend/API</option>
+                      <option value="Consultation">Consultation</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Details</label>
-                    <textarea rows="4" className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none" placeholder="Tell me about your project, budget, and timeline..."></textarea>
+                    <textarea name="message" required rows="4" className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 focus:bg-white focus:ring-2 focus:ring-teal-500 outline-none transition-all resize-none" placeholder="Tell me about your project, budget, and timeline..."></textarea>
                   </div>
 
-                  <button className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-                    Send Inquiry <ArrowRight size={18} />
+                  <button 
+                    type="submit" 
+                    disabled={isSending}
+                    className={`
+                      w-full font-bold py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2
+                      ${isSending ? "bg-slate-400 cursor-not-allowed text-white" : "bg-teal-600 hover:bg-teal-700 text-white"}
+                    `}
+                  >
+                    {isSending ? (
+                      <>Sending... <Loader2 className="animate-spin" size={20} /></>
+                    ) : (
+                      <>Send Inquiry <ArrowRight size={18} /></>
+                    )}
                   </button>
                </form>
              </div>

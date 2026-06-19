@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import { Briefcase, GraduationCap, Trophy, Code2, Calendar, ArrowDown } from "lucide-react";
 import JourneyGallery from "./JourneyGallery";
 
-// Data remains the same
-const journey = [
+// Mock Fallback Data
+const journeyFallback = [
   {
     year: "2025 - Present",
     title: "Full-Stack Developer",
@@ -33,7 +34,7 @@ const journey = [
     title: "NPTEL Java Certification",
     company: "Elite + Silver Award",
     desc: "Achieved top 5% score. Strengthened core programming concepts including OOP, Multithreading, and Data Structures in Java.",
-    icon: <AwardIcon />, 
+    icon: <Trophy size={18} />, 
     type: "education",
   },
   {
@@ -46,22 +47,45 @@ const journey = [
   }
 ];
 
-function AwardIcon() {
-    return <Trophy size={18} />
-}
+const getIcon = (type) => {
+  switch (type) {
+    case "education":
+      return <GraduationCap size={18} />;
+    case "achievement":
+      return <Trophy size={18} />;
+    case "work":
+    default:
+      return <Briefcase size={18} />;
+  }
+};
 
 export default function ExperienceSection() {
+  const dbExperience = useSelector((state) => state.portfolio.experience);
+
+  // Map dynamic experiences from database
+  const mappedDbExperience = dbExperience
+    .map((item) => ({
+      year: item.year,
+      title: item.title,
+      company: item.company,
+      desc: item.desc,
+      type: item.type,
+      icon: getIcon(item.type),
+      displayOrder: item.displayOrder || 0,
+    }))
+    .sort((a, b) => b.displayOrder - a.displayOrder); // Sort custom order or descending
+
+  // Use dynamic list if populated, otherwise mock fallback
+  const journey = mappedDbExperience.length > 0 ? mappedDbExperience : journeyFallback;
+
   return (
     <section id="experience" className="relative w-full bg-slate-50 py-24 px-6 lg:px-8 overflow-hidden">
-      
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent" />
 
       <div className="max-w-7xl mx-auto">
-
         {/* --- PART 1: HEADER & TIMELINE (Centered) --- */}
         <div className="max-w-4xl mx-auto mb-24">
-          
           {/* Section Header */}
           <div className="text-center mb-16">
             <motion.div
@@ -130,10 +154,8 @@ export default function ExperienceSection() {
           </div>
         </div>
 
-
         {/* --- PART 2: VISUAL GALLERY (Full Width) --- */}
         <div className="relative w-full border-t border-slate-200 pt-16">
-            
             {/* Transition Title */}
             <div className="text-center mb-12">
                 <div className="inline-flex items-center justify-center p-3 bg-white rounded-full shadow-sm border border-slate-100 mb-4 text-teal-600">
@@ -147,7 +169,7 @@ export default function ExperienceSection() {
                 </p>
             </div>
 
-            {/* The Gallery Component - Now has full width to breathe */}
+            {/* The Gallery Component */}
             <div className="w-full">
                 <JourneyGallery />
             </div>
@@ -155,7 +177,6 @@ export default function ExperienceSection() {
             {/* Background Blob for the Gallery Area */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] bg-teal-50/50 blur-[100px] -z-10 rounded-full mix-blend-multiply pointer-events-none" />
         </div>
-
       </div>
     </section>
   );

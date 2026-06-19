@@ -1,44 +1,71 @@
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 import { assets } from "../assets/assets";
 import { MapPin, Calendar, ArrowRight, BookOpen } from "lucide-react";
 
+// Mock Fallback Data
+const storiesFallback = [
+  {
+    id: 1,
+    image: assets.hero1,
+    tag: "Hackathon",
+    color: "bg-amber-100 text-amber-800 border-amber-200",
+    title: "Hack-O-Nova 2024",
+    short: "A high-pressure 36-hour hackathon where we conceptualized and built an AI-driven study planner from scratch.",
+    year: "Mar 2024",
+    location: "Adamas University",
+    slug: "hackonova-2024",
+  },
+  {
+    id: 2,
+    image: assets.hero3,
+    tag: "Certification",
+    color: "bg-blue-100 text-blue-800 border-blue-200",
+    title: "NPTEL — Java Programming",
+    short: "Awarded Elite+Silver for mastering advanced Java concepts, including Multithreading, Collections, and OOP design patterns.",
+    year: "Jan 2024",
+    location: "JIS University",
+    slug: "nptel-java",
+  },
+  {
+    id: 3,
+    image: assets.hero5,
+    tag: "Training",
+    color: "bg-emerald-100 text-emerald-800 border-emerald-200",
+    title: "MERN Architecture Training",
+    short: "An intensive industrial training program focused on building scalable APIs, managing MongoDB schemas, and deploying to AWS.",
+    year: "Dec 2023",
+    location: "Ardent Computech",
+    slug: "mern-training-ardent",
+  },
+];
+
+const badgeColors = [
+  "bg-amber-100 text-amber-800 border-amber-200",
+  "bg-blue-100 text-blue-800 border-blue-200",
+  "bg-emerald-100 text-emerald-800 border-emerald-200",
+  "bg-purple-100 text-purple-800 border-purple-200"
+];
+
 export default function Stories() {
-  
-  const stories = [
-    {
-      id: 1,
-      image: assets.hero1,
-      tag: "Hackathon",
-      color: "bg-amber-100 text-amber-800 border-amber-200", // Custom badge color
-      title: "Hack-O-Nova 2024",
-      short: "A high-pressure 36-hour hackathon where we conceptualized and built an AI-driven study planner from scratch.",
-      year: "Mar 2024",
-      location: "Adamas University",
-      slug: "hackonova-2024",
-    },
-    {
-      id: 2,
-      image: assets.hero3,
-      tag: "Certification",
-      color: "bg-blue-100 text-blue-800 border-blue-200",
-      title: "NPTEL — Java Programming",
-      short: "Awarded Elite+Silver for mastering advanced Java concepts, including Multithreading, Collections, and OOP design patterns.",
-      year: "Jan 2024",
-      location: "JIS University",
-      slug: "nptel-java",
-    },
-    {
-      id: 3,
-      image: assets.hero5,
-      tag: "Training",
-      color: "bg-emerald-100 text-emerald-800 border-emerald-200",
-      title: "MERN Architecture Training",
-      short: "An intensive industrial training program focused on building scalable APIs, managing MongoDB schemas, and deploying to AWS.",
-      year: "Dec 2023",
-      location: "Ardent Computech",
-      slug: "mern-training-ardent",
-    },
-  ];
+  const dbStories = useSelector((state) => state.portfolio.stories);
+
+  // Map database stories
+  const mappedDbStories = dbStories
+    .filter((s) => s.published !== false)
+    .map((story, idx) => ({
+      id: story._id || idx,
+      image: story.image,
+      tag: story.tag,
+      color: badgeColors[idx % badgeColors.length],
+      title: story.title,
+      short: story.description,
+      year: story.year,
+      location: story.location,
+      slug: story.slug,
+    }));
+
+  const stories = mappedDbStories.length > 0 ? mappedDbStories : storiesFallback;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -56,7 +83,6 @@ export default function Stories() {
   return (
     <section className="w-full bg-slate-50 py-24 px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-
         {/* --- HERO HEADER --- */}
         <div className="text-center mb-16 max-w-3xl mx-auto">
           <motion.div
@@ -86,14 +112,12 @@ export default function Stories() {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          
           {stories.map((story) => (
             <motion.div
               key={story.id}
               variants={cardVariants}
               className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:border-teal-200 transition-all duration-300"
             >
-              
               {/* IMAGE HEADER */}
               <div className="relative h-56 overflow-hidden">
                 <img
@@ -114,13 +138,12 @@ export default function Stories() {
 
               {/* CARD BODY */}
               <div className="p-6 flex flex-col flex-grow">
-                
                 {/* Meta Data */}
                 <div className="flex items-center gap-4 text-xs font-medium text-slate-500 mb-3">
                    <div className="flex items-center gap-1">
                       <Calendar size={14} className="text-teal-500" /> {story.year}
                    </div>
-                   <div className="w-1 h-1 bg-slate-300 rounded-full" />
+                   <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
                    <div className="flex items-center gap-1">
                       <MapPin size={14} className="text-teal-500" /> {story.location}
                    </div>
@@ -145,9 +168,7 @@ export default function Stories() {
               </div>
             </motion.div>
           ))}
-
         </motion.div>
-
       </div>
     </section>
   );
