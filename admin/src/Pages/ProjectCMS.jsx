@@ -50,7 +50,11 @@ const ProjectCMS = () => {
         </span>
       )
     },
-    { header: 'Tech Stack', accessor: 'techStack' },
+    { 
+      header: 'Tech Stack', 
+      accessor: 'techStack',
+      render: (row) => Array.isArray(row.techStack) ? row.techStack.join(', ') : ''
+    },
     {
       header: 'Featured',
       accessor: 'featured',
@@ -64,8 +68,8 @@ const ProjectCMS = () => {
       header: 'Status',
       accessor: 'status',
       render: (row) => (
-        <span className={`text-[11px] font-bold uppercase tracking-wider ${row.status === 'published' ? 'text-teal-400' : 'text-amber-500'}`}>
-          ● {row.status}
+        <span className={`text-[11px] font-bold uppercase tracking-wider ${row.status === 'active' ? 'text-teal-400' : 'text-amber-500'}`}>
+          ● {row.status === 'active' ? 'published' : 'draft'}
         </span>
       )
     }
@@ -82,17 +86,17 @@ const ProjectCMS = () => {
     setFormData({
       title: project.title || '',
       slug: project.slug || '',
-      shortDescription: project.shortDescription || '',
-      fullDescription: project.fullDescription || '',
+      shortDescription: project.description || '',
+      fullDescription: project.description || '',
       category: project.category || 'frontend',
-      techStack: project.techStack || '',
+      techStack: Array.isArray(project.techStack) ? project.techStack.join(', ') : '',
       githubUrl: project.githubUrl || '',
       liveUrl: project.liveUrl || '',
       thumbnail: project.thumbnail || '',
       demoVideo: project.demoVideo || '',
       featured: project.featured || false,
       displayOrder: project.displayOrder || 1,
-      status: project.status || 'published'
+      status: project.status === 'active' ? 'published' : 'draft'
     });
     setIsModalOpen(true);
   };
@@ -105,10 +109,24 @@ const ProjectCMS = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const payload = {
+      title: formData.title,
+      slug: formData.slug,
+      description: formData.fullDescription || formData.shortDescription || '',
+      category: formData.category,
+      techStack: formData.techStack ? formData.techStack.split(',').map(s => s.trim()).filter(Boolean) : [],
+      githubUrl: formData.githubUrl,
+      liveUrl: formData.liveUrl,
+      thumbnail: formData.thumbnail,
+      demoVideo: formData.demoVideo,
+      featured: formData.featured,
+      displayOrder: Number(formData.displayOrder) || 0,
+      status: formData.status === 'published' ? 'active' : 'draft'
+    };
     if (editingProject) {
-      dispatch(projectThunks.update({ id: editingProject._id, payload: formData }));
+      dispatch(projectThunks.update({ id: editingProject._id, payload }));
     } else {
-      dispatch(projectThunks.create(formData));
+      dispatch(projectThunks.create(payload));
     }
     setIsModalOpen(false);
   };

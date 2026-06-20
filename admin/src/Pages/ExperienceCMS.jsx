@@ -13,47 +13,48 @@ const ExperienceCMS = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingExperience, setEditingExperience] = useState(null);
 
-  // Form Initial Framework mapping directly to MongoDB Schema
+  // Baseline state structure mirroring your MongoDB Schema
   const initialFormState = {
     title: '',
-    organization: '',
+    company: '',
     location: '',
-    startDate: '',
-    endDate: '',
-    description: '',
-    technologies: '',
-    certificateUrl: '',
-    featured: false
+    year: '',
+    desc: '',
+    type: 'work',
+    skills: '',
+    certificate: '',
+    displayOrder: 0
   };
 
   const [formData, setFormData] = useState(initialFormState);
 
-  // Fetch experiences on mount
+  // Fetch all experiences on mount
   useEffect(() => {
     dispatch(experienceThunks.fetchAll());
   }, [dispatch]);
 
   const columns = [
+    { header: 'Order', accessor: 'displayOrder' },
     { 
       header: 'Timeline Window', 
-      accessor: 'startDate',
+      accessor: 'year',
       render: (row) => (
         <span className="flex items-center gap-1.5 font-mono text-xs text-slate-400">
           <Calendar className="w-3 h-3 text-emerald-400" />
-          {row.startDate} — {row.endDate || 'Present'}
+          {row.year}
         </span>
       )
     },
     { header: 'Role Title', accessor: 'title' },
-    { header: 'Organization', accessor: 'organization' },
+    { header: 'Company', accessor: 'company' },
     { header: 'Location Context', accessor: 'location' },
     {
-      header: 'Promoted',
-      accessor: 'featured',
-      render: (row) => row.featured ? (
-        <span className="text-[10px] text-emerald-400 font-bold tracking-wider uppercase bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Featured</span>
-      ) : (
-        <span className="text-xs text-slate-600">Standard</span>
+      header: 'Type',
+      accessor: 'type',
+      render: (row) => (
+        <span className="text-xs font-semibold px-2 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800/80 uppercase">
+          {row.type}
+        </span>
       )
     }
   ];
@@ -68,14 +69,14 @@ const ExperienceCMS = () => {
     setEditingExperience(exp);
     setFormData({
       title: exp.title || '',
-      organization: exp.organization || '',
+      company: exp.company || '',
       location: exp.location || '',
-      startDate: exp.startDate || '',
-      endDate: exp.endDate || '',
-      description: exp.description || '',
-      technologies: exp.technologies || '',
-      certificateUrl: exp.certificateUrl || '',
-      featured: exp.featured || false
+      year: exp.year || '',
+      desc: exp.desc || '',
+      type: exp.type || 'work',
+      skills: Array.isArray(exp.skills) ? exp.skills.join(', ') : '',
+      certificate: exp.certificate || '',
+      displayOrder: exp.displayOrder || 0
     });
     setIsModalOpen(true);
   };
@@ -88,10 +89,15 @@ const ExperienceCMS = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const payload = {
+      ...formData,
+      skills: formData.skills ? formData.skills.split(',').map(s => s.trim()).filter(Boolean) : [],
+      displayOrder: Number(formData.displayOrder) || 0
+    };
     if (editingExperience) {
-      dispatch(experienceThunks.update({ id: editingExperience._id, payload: formData }));
+      dispatch(experienceThunks.update({ id: editingExperience._id, payload }));
     } else {
-      dispatch(experienceThunks.create(formData));
+      dispatch(experienceThunks.create(payload));
     }
     setIsModalOpen(false);
   };
@@ -146,12 +152,12 @@ const ExperienceCMS = () => {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Organization / Firm Entity Name</label>
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Company / Issuer Name</label>
               <input 
                 type="text" 
                 required
-                value={formData.organization}
-                onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                value={formData.company}
+                onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                 className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
               />
             </div>
@@ -159,29 +165,18 @@ const ExperienceCMS = () => {
 
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Start Window (YYYY-MM)</label>
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Timeframe Range (e.g. '2025 - Present')</label>
               <input 
                 type="text" 
                 required
-                placeholder="2025-06"
-                value={formData.startDate}
-                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 font-mono focus:outline-none focus:border-emerald-500/50 transition-all"
+                placeholder="e.g. 2025 - Present"
+                value={formData.year}
+                onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">End Window (or 'Present')</label>
-              <input 
-                type="text" 
-                required
-                placeholder="2025-09"
-                value={formData.endDate}
-                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 font-mono focus:outline-none focus:border-emerald-500/50 transition-all"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Location Scope</label>
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Location Context</label>
               <input 
                 type="text" 
                 placeholder="e.g. Remote / Kolkata"
@@ -190,26 +185,50 @@ const ExperienceCMS = () => {
                 className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
               />
             </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Timeline Event Type</label>
+              <select
+                value={formData.type}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
+              >
+                <option value="work">Work Experience</option>
+                <option value="education">Education / Degree</option>
+                <option value="achievement">Achievement / Award</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Core Technologies / Skills (Comma-separated)</label>
+              <input 
+                type="text" 
+                placeholder="React, Express, AWS, etc."
+                value={formData.skills}
+                onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Display Order (Integer)</label>
+              <input 
+                type="number" 
+                min="0"
+                value={formData.displayOrder}
+                onChange={(e) => setFormData({ ...formData, displayOrder: e.target.value })}
+                className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
+              />
+            </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Core Technologies Deployed</label>
-            <input 
-              type="text" 
-              placeholder="React, Express, AWS, etc."
-              value={formData.technologies}
-              onChange={(e) => setFormData({ ...formData, technologies: e.target.value })}
-              className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 focus:outline-none focus:border-emerald-500/50 transition-all"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Functional Duties Description Breakdown</label>
+            <label className="text-xs font-semibold text-slate-400 tracking-wide uppercase">Description Breakdown</label>
             <textarea 
               rows={4}
               placeholder="Detail your operational responsibilities and key deliverables..."
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              value={formData.desc}
+              onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
               className="w-full px-4 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-sm font-medium text-slate-300 font-sans focus:outline-none focus:border-emerald-500/50 transition-all resize-none"
             />
           </div>
@@ -217,23 +236,10 @@ const ExperienceCMS = () => {
           {/* Secure Credential Verification PDF Hook */}
           <MediaSelector 
             label="Verification Document / Completion Certificate URL" 
-            value={formData.certificateUrl}
-            onChange={(url) => setFormData({ ...formData, certificateUrl: url })}
+            value={formData.certificate}
+            onChange={(url) => setFormData({ ...formData, certificate: url })}
             type="pdf"
           />
-
-          <div className="flex items-center justify-between p-4 bg-slate-950 border border-slate-800/60 rounded-xl">
-            <div className="space-y-0.5">
-              <h4 className="text-xs font-semibold text-slate-200">Featured Placement</h4>
-              <p className="text-[10px] text-slate-500">Highlight this role prominently at the top of your public resume timelines.</p>
-            </div>
-            <input 
-              type="checkbox"
-              checked={formData.featured}
-              onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-              className="w-4 h-4 rounded border-slate-800 text-emerald-500 focus:ring-emerald-500/30 bg-slate-950"
-            />
-          </div>
 
           <div className="pt-2 flex justify-end gap-3">
             <button

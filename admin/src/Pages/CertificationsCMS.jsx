@@ -32,29 +32,24 @@ const CertificationsCMS = () => {
   }, [dispatch]);
 
   const columns = [
-    { header: 'Issue Date', accessor: 'issueDate' },
+    { 
+      header: 'Issue Date', 
+      accessor: 'issueDate',
+      render: (row) => row.issueDate ? new Date(row.issueDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' }) : ''
+    },
     { header: 'Certification Title', accessor: 'title' },
     { header: 'Issuing Organization', accessor: 'issuer' },
-    { 
-      header: 'Credential ID', 
-      accessor: 'credentialId',
-      render: (row) => (
-        <span className="font-mono text-xs text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800/60">
-          {row.credentialId || 'N/A'}
-        </span>
-      )
-    },
     {
-      header: 'Verify Link',
-      accessor: 'verificationLink',
-      render: (row) => row.verificationLink ? (
+      header: 'Credential Link',
+      accessor: 'certificateUrl',
+      render: (row) => row.certificateUrl ? (
         <a 
-          href={row.verificationLink} 
+          href={row.certificateUrl} 
           target="_blank" 
           rel="noreferrer"
           className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 text-xs"
         >
-          Verify <ExternalLink className="w-3 h-3" />
+          View Credential <ExternalLink className="w-3 h-3" />
         </a>
       ) : (
         <span className="text-xs text-slate-600">None</span>
@@ -73,11 +68,11 @@ const CertificationsCMS = () => {
     setFormData({
       title: cert.title || '',
       issuer: cert.issuer || '',
-      issueDate: cert.issueDate || '',
-      credentialId: cert.credentialId || '',
-      certificateFile: cert.certificateFile || '',
+      issueDate: cert.issueDate ? new Date(cert.issueDate).toISOString().split('T')[0].slice(0, 7) : '',
+      credentialId: '',
+      certificateFile: cert.certificateUrl || '',
       thumbnail: cert.thumbnail || '',
-      verificationLink: cert.verificationLink || ''
+      verificationLink: cert.certificateUrl || ''
     });
     setIsModalOpen(true);
   };
@@ -90,10 +85,17 @@ const CertificationsCMS = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    const payload = {
+      title: formData.title,
+      issuer: formData.issuer,
+      issueDate: formData.issueDate,
+      certificateUrl: formData.certificateFile || formData.verificationLink || "https://example.com/placeholder-certificate",
+      thumbnail: formData.thumbnail
+    };
     if (editingCert) {
-      dispatch(certThunks.update({ id: editingCert._id, payload: formData }));
+      dispatch(certThunks.update({ id: editingCert._id, payload }));
     } else {
-      dispatch(certThunks.create(formData));
+      dispatch(certThunks.create(payload));
     }
     setIsModalOpen(false);
   };
