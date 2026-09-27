@@ -9,15 +9,18 @@ import {
   FileText, 
   Mail, 
   Settings, 
-  FolderOpen 
+  FolderOpen,
+  BarChart3
 } from 'lucide-react';
 
 const AdminSidebar = () => {
-  // Navigation items mapping to your 10 required admin modules
+  // Navigation items mapping to your admin modules
   const navItems = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+    { name: 'Traffic Analytics', path: '/admin/analytics', icon: BarChart3 },
     { name: 'Projects', path: '/admin/projects', icon: FolderOpen },
     { name: 'Stories', path: '/admin/stories', icon: BookOpen },
+    { name: 'Devlogs & Blogs', path: '/admin/blogs', icon: BookOpen },
     { name: 'Experience', path: '/admin/experience', icon: Briefcase },
     { name: 'Skills', path: '/admin/skills', icon: Cpu },
     { name: 'Certifications', path: '/admin/certifications', icon: Award },

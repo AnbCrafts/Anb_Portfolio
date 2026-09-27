@@ -8,8 +8,10 @@ import AdminLayout from './Components/AdminLayout'
 // CMS Page Components
 import AdminLogin from './Pages/AdminLogin'
 import DashboardHome from './Pages/DashboardHome'
+import AnalyticsCMS from './Pages/AnalyticsCMS'
 import ProjectCMS from './Pages/ProjectCMS'
 import StoryCMS from './Pages/StoryCMS'
+import BlogCMS from './Pages/BlogCMS'
 import ExperienceCMS from './Pages/ExperienceCMS'
 import SkillsCMS from './Pages/SkillsCMS'
 import CertificationsCMS from './Pages/CertificationsCMS'
@@ -30,8 +32,10 @@ const App = () => {
           <Route element={<AdminLayout />}>
             <Route index element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="dashboard" element={<DashboardHome />} />
+            <Route path="analytics" element={<AnalyticsCMS />} />
             <Route path="projects" element={<ProjectCMS />} />
             <Route path="stories" element={<StoryCMS />} />
+            <Route path="blogs" element={<BlogCMS />} />
             <Route path="experience" element={<ExperienceCMS />} />
             <Route path="skills" element={<SkillsCMS />} />
             <Route path="certifications" element={<CertificationsCMS />} />
