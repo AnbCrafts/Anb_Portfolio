@@ -5,6 +5,7 @@ import {
   getProjectBySlug,
   updateProject,
   deleteProject,
+  seedProjects,
 } from "../Controllers/Project.Controller.js";
 import { protect } from "../Middleware/Auth.Middleware.js";
 
@@ -14,6 +15,8 @@ router.route("/")
   .get(getAllProjects)
   .post(protect, createProject);
 
+router.post("/seed", seedProjects);
+
 router.route("/slug/:slug")
   .get(getProjectBySlug);
 
@@ -22,3 +25,4 @@ router.route("/:id")
   .delete(protect, deleteProject);
 
 export default router;
+

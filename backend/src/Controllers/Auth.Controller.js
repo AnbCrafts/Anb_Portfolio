@@ -67,15 +67,19 @@ const loginInit = asyncHandler(async (req, res) => {
   user.otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
   await user.save();
 
-  // Send email
-  await sendEmail({
-    to: user.email,
-    subject: "Admin Control Center OTP - Login Verification",
-    text: `Your OTP for logging into the admin panel is: ${otpCode}. This code is valid for 10 minutes.`,
-    html: `<h3>Admin Control Center Authentication</h3>
-           <p>Your one-time login verification OTP is: <strong>${otpCode}</strong></p>
-           <p>This code will expire in 10 minutes.</p>`,
-  });
+  // Send email (safely wrapped so SMTP failure does not block login)
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Admin Control Center OTP - Login Verification",
+      text: `Your OTP for logging into the admin panel is: ${otpCode}. This code is valid for 10 minutes.`,
+      html: `<h3>Admin Control Center Authentication</h3>
+             <p>Your one-time login verification OTP is: <strong>${otpCode}</strong></p>
+             <p>This code will expire in 10 minutes.</p>`,
+    });
+  } catch (err) {
+    console.error("[OTP Email Notice]: Failed to dispatch email via SMTP:", err.message);
+  }
 
   return res.status(200).json(
     new ApiResponse(200, { mfaRequired: true }, "MFA OTP sent successfully")
@@ -158,14 +162,18 @@ const forgotPassword = asyncHandler(async (req, res) => {
   user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
   await user.save();
 
-  await sendEmail({
-    to: user.email,
-    subject: "Admin Control Center OTP - Password Reset",
-    text: `Your OTP for resetting your admin password is: ${otpCode}. This code is valid for 10 minutes.`,
-    html: `<h3>Admin Password Reset Request</h3>
-           <p>Your one-time password reset OTP is: <strong>${otpCode}</strong></p>
-           <p>This code will expire in 10 minutes.</p>`,
-  });
+  try {
+    await sendEmail({
+      to: user.email,
+      subject: "Admin Control Center OTP - Password Reset",
+      text: `Your OTP for resetting your admin password is: ${otpCode}. This code is valid for 10 minutes.`,
+      html: `<h3>Admin Password Reset Request</h3>
+             <p>Your one-time password reset OTP is: <strong>${otpCode}</strong></p>
+             <p>This code will expire in 10 minutes.</p>`,
+    });
+  } catch (err) {
+    console.error("[OTP Email Notice]: Failed to dispatch email via SMTP:", err.message);
+  }
 
   return res.status(200).json(
     new ApiResponse(200, {}, "Password reset OTP sent successfully")

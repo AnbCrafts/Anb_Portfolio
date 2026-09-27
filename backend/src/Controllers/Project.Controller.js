@@ -91,4 +91,74 @@ const deleteProject = async (req, res) => {
   }
 };
 
-export { createProject, getAllProjects, getProjectBySlug, updateProject, deleteProject };
+// @desc    Seed initial flagship projects
+// @route   POST /api/projects/seed
+// @access  Public
+const seedProjects = async (req, res) => {
+  try {
+    const projectsToSeed = [
+      {
+        title: "TrackForge",
+        slug: "trackforge",
+        description: "A complete bug tracking & sprint management platform featuring Groq Llama 3.3 AI code analysis, multi-role access control (RBAC), real-time collaborative workspace rooms, sprint analytics, and customizable kanban status workflows.",
+        category: "fullstack",
+        techStack: ["MERN Stack", "Groq Llama 3.3 AI", "Socket.io", "Recharts", "Tailwind CSS", "JWT Auth"],
+        githubUrl: "https://github.com/AnbCrafts/TrackForge.git",
+        liveUrl: "https://trackforge-client-qpdy.onrender.com/",
+        thumbnail: "https://raw.githubusercontent.com/AnbCrafts/TrackForge/master/screenshots/home.png",
+        gallery: ["https://raw.githubusercontent.com/AnbCrafts/TrackForge/master/screenshots/home.png"],
+        featured: true,
+        displayOrder: 1,
+        status: "active"
+      },
+      {
+        title: "Nirman.AI (Website Builder)",
+        slug: "website-builder",
+        description: "An autonomous multi-agent AI website generator powered by Google Gemini. Features a 4-stage AI architecture (Plan, Code, Refine, Audit), in-browser Monaco Studio IDE, real-time iframe preview staging, and full-stack web application compilation.",
+        category: "ai",
+        techStack: ["React", "Node.js", "Express", "Google Gemini AI", "Monaco Editor", "Tailwind CSS"],
+        githubUrl: "https://github.com/AnbCrafts/Website-Builder-Client.git",
+        liveUrl: "https://website-builder-client-r1q9.onrender.com",
+        thumbnail: "https://raw.githubusercontent.com/AnbCrafts/Website-Builder-Client/main/Screenshots/home.png",
+        gallery: [
+          "https://raw.githubusercontent.com/AnbCrafts/Website-Builder-Client/main/Screenshots/home.png",
+          "https://raw.githubusercontent.com/AnbCrafts/Website-Builder-Client/main/Screenshots/split.png"
+        ],
+        featured: true,
+        displayOrder: 2,
+        status: "active"
+      },
+      {
+        title: "CodeSage AI",
+        slug: "codesage",
+        description: "An AI-powered developer assistant powered by Llama 3 70B models. Features automated code explanation, line-by-line syntax breakdown, Big O complexity analysis, multi-language code translation, and unit test generation.",
+        category: "ai",
+        techStack: ["MERN Stack", "Llama 3 70B", "Groq AI API", "Monaco Editor", "Tailwind CSS"],
+        githubUrl: "https://github.com/AnbCrafts/CodeSage.git",
+        liveUrl: "https://codesage-client.onrender.com/",
+        thumbnail: "https://raw.githubusercontent.com/AnbCrafts/CodeSage/main/screenshots/home.png",
+        gallery: ["https://raw.githubusercontent.com/AnbCrafts/CodeSage/main/screenshots/home.png"],
+        featured: true,
+        displayOrder: 3,
+        status: "active"
+      }
+    ];
+
+    const results = [];
+    for (const proj of projectsToSeed) {
+      const updated = await Project.findOneAndUpdate(
+        { title: proj.title },
+        proj,
+        { upsert: true, new: true, runValidators: true }
+      );
+      results.push(updated);
+    }
+
+    return res.status(200).json({ success: true, message: "Flagship projects seeded successfully", data: results });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export { createProject, getAllProjects, getProjectBySlug, updateProject, deleteProject, seedProjects };
+

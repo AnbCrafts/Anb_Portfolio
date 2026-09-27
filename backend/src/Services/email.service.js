@@ -26,18 +26,27 @@ const sendEmail = async ({ to, subject, text, html }) => {
     return;
   }
 
-  // Create transporter
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465, // true for 465, false for other ports
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-  });
+  // Create transporter and send with fallback
+  try {
+    const transporter = nodemailer.createTransport({
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465, // true for 465, false for other ports
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+    });
 
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
+  } catch (error) {
+    console.log("==================================================");
+    console.log("⚠️  SMTP Send Error (Graceful Console Fallback):", error.message);
+    console.log(`✉️  Sending Email To: ${to}`);
+    console.log(`📝 Subject: ${subject}`);
+    console.log(`💬 Text Content:\n${text}`);
+    console.log("==================================================");
+  }
 };
 
 export { sendEmail };

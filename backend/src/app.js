@@ -19,6 +19,8 @@ import testimonialRoutes from "./Routes/Testimonial.Routes.js";
 import resumeRoutes from "./Routes/Resume.Routes.js";
 import mediaRoutes from "./Routes/Media.Routes.js";
 import dashboardRoutes from "./Routes/Dashboard.Routes.js";
+import blogRoutes from "./Routes/Blog.Routes.js";
+import analyticsRoutes from "./Routes/Analytics.Routes.js";
 
 dotenv.config();
 
@@ -59,6 +61,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/stories", storyRoutes);
+app.use("/api/blogs", blogRoutes);
+app.use("/api/analytics", analyticsRoutes);
 app.use("/api/skills", skillRoutes);
 app.use("/api/experience", experienceRoutes);
 app.use("/api/certificates", certificateRoutes);
