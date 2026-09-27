@@ -33,7 +33,7 @@ const skillGroupsFallback = [
     title: "DevOps & Tools",
     icon: <Terminal size={24} className="text-orange-500" />,
     description: "Version control & deployment",
-    skills: ["Docker", "Git/GitHub", "AWS EC2", "CI/CD", "Postman"],
+    skills: ["Docker", "Git/GitHub", "VPS Management", "Nginx", "PM2", "Postman", "Vercel", "Render"],
     color: "orange",
   },
 ];
@@ -66,19 +66,19 @@ const categoryConfigs = {
 };
 
 const colorMap = {
-  blue: "bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100",
-  emerald: "bg-emerald-50 text-emerald-700 border-emerald-100 hover:bg-emerald-100",
-  purple: "bg-purple-50 text-purple-700 border-purple-100 hover:bg-purple-100",
-  orange: "bg-orange-50 text-orange-700 border-orange-100 hover:bg-orange-100",
+  blue: "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/80",
+  emerald: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/80",
+  purple: "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-900/60 hover:bg-purple-100 dark:hover:bg-purple-900/80",
+  orange: "bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 border-orange-100 dark:border-orange-900/60 hover:bg-orange-100 dark:hover:bg-orange-900/80",
 };
 
 export default function SkillsSection() {
   const dbSkills = useSelector((state) => state.portfolio.skills);
 
-  // Group dynamic database skills
+  // Group dynamic database skills (filtering out AWS and GCP)
   const groupedDbSkills = Object.keys(categoryConfigs).map((cat) => {
     const catSkills = dbSkills
-      .filter((s) => s.category === cat)
+      .filter((s) => s.category === cat && s.name !== "AWS" && !s.name.includes("GCP") && !s.name.includes("Google Cloud"))
       .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
       .map((s) => s.name);
     return {
@@ -91,9 +91,9 @@ export default function SkillsSection() {
   const skillGroups = groupedDbSkills.length > 0 ? groupedDbSkills : skillGroupsFallback;
 
   return (
-    <section id="skills" className="relative w-full py-24 px-6 overflow-hidden bg-white">
+    <section id="skills" className="relative w-full py-16 md:py-20 px-6 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Subtle Background Decor */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-50/50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-50/50 dark:bg-teal-950/20 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
       
       <div className="max-w-7xl mx-auto">
         {/* HEADER */}
@@ -102,16 +102,16 @@ export default function SkillsSection() {
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-slate-900 tracking-tight"
+            className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight"
           >
-            Technical <span className="text-teal-600">Expertise</span>
+            Technical <span className="text-teal-600 dark:text-teal-400">Expertise</span>
           </motion.h2>
           <motion.p
              initial={{ opacity: 0, y: 10 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.1 }}
-             className="mt-4 text-slate-600 max-w-2xl mx-auto text-lg"
+             className="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto text-lg"
           >
             A comprehensive toolset for building scalable, high-performance web applications from concept to deployment.
           </motion.p>
@@ -127,19 +127,19 @@ export default function SkillsSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -5 }}
-              className="group relative bg-white border border-slate-100 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300"
+              className="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-300"
             >
               {/* Header inside Card */}
               <div className="flex items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-slate-50 group-hover:bg-white group-hover:shadow-md transition-all duration-300 ring-1 ring-slate-100">
+                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:bg-white dark:group-hover:bg-slate-700 group-hover:shadow-md transition-all duration-300 ring-1 ring-slate-100 dark:ring-slate-700">
                     {group.icon}
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-800">
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
                       {group.title}
                     </h3>
-                    <p className="text-sm text-slate-500 mt-1">
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                       {group.description}
                     </p>
                   </div>
@@ -147,7 +147,7 @@ export default function SkillsSection() {
               </div>
 
               {/* Divider */}
-              <div className="w-full h-px bg-slate-100 mb-6 group-hover:bg-slate-200 transition-colors" />
+              <div className="w-full h-px bg-slate-100 dark:bg-slate-800 mb-6 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition-colors" />
 
               {/* Skills Tags */}
               <div className="flex flex-wrap gap-2.5">

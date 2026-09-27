@@ -6,10 +6,26 @@ import JourneyGallery from "./JourneyGallery";
 // Mock Fallback Data
 const journeyFallback = [
   {
-    year: "2025 - Present",
+    year: "Sept 2026 - Present",
+    title: "Software Developer",
+    company: "Management & Computer Consultants (MCC)",
+    desc: "Currently undergoing intensive training in C#, .NET, and SQL while contributing to software development projects.",
+    icon: <Briefcase size={18} />,
+    type: "work",
+  },
+  {
+    year: "May 2026 - Sept 2026",
+    title: "MERN Stack Developer Intern",
+    company: "Hansraj Ventures",
+    desc: "Developed and maintained scalable MERN stack applications using MongoDB, Express.js, React.js, and Node.js. Built secure RESTful APIs, responsive frontend interfaces, optimized database structures, and managed deployments on AWS, GCP, VPS, Docker, Nginx, and PM2.",
+    icon: <Briefcase size={18} />,
+    type: "work",
+  },
+  {
+    year: "2025",
     title: "Full-Stack Developer",
     company: "Personal Projects & Freelance",
-    desc: "Building production-grade apps including TrackForge & FitForWork. Focusing on scalable MERN architecture, advanced UI engineering, and system design patterns.",
+    desc: "Building production-grade apps including Nirman AI, TrackForge & FitForWork. Focusing on scalable MERN architecture, advanced UI engineering, and system design patterns.",
     icon: <Code2 size={18} />,
     type: "work",
   },
@@ -79,9 +95,9 @@ export default function ExperienceSection() {
   const journey = mappedDbExperience.length > 0 ? mappedDbExperience : journeyFallback;
 
   return (
-    <section id="experience" className="relative w-full bg-slate-50 py-24 px-6 lg:px-8 overflow-hidden">
+    <section id="experience" className="relative w-full bg-slate-50 dark:bg-slate-950 py-16 md:py-20 px-6 lg:px-8 overflow-hidden transition-colors duration-300">
       {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white to-transparent" />
+      <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white dark:from-slate-900 to-transparent" />
 
       <div className="max-w-7xl mx-auto">
         {/* --- PART 1: HEADER & TIMELINE (Centered) --- */}
@@ -93,20 +109,20 @@ export default function ExperienceSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <span className="inline-block py-1 px-3 rounded-full bg-teal-100 text-teal-700 text-sm font-bold tracking-wide border border-teal-200 mb-4">
+              <span className="inline-block py-1 px-3 rounded-full bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 text-sm font-bold tracking-wide border border-teal-200 dark:border-teal-900 mb-4">
                 MY PATH
               </span>
-              <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
-                Education & <span className="text-teal-600">Experience</span>
+              <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+                Education & <span className="text-teal-600 dark:text-teal-400">Experience</span>
               </h2>
-              <p className="text-slate-600 text-lg max-w-2xl mx-auto">
+              <p className="text-slate-600 dark:text-slate-300 text-lg max-w-2xl mx-auto">
                 A timeline of my professional growth, technical milestones, and the key events that shaped my career.
               </p>
             </motion.div>
           </div>
 
           {/* Timeline List */}
-          <div className="relative pl-8 border-l-2 border-slate-200 space-y-12 ml-4 md:ml-0">
+          <div className="relative pl-8 border-l-2 border-slate-200 dark:border-slate-800 space-y-12 ml-4 md:ml-0">
             {journey.map((item, index) => (
               <motion.div
                 key={index}
@@ -119,10 +135,10 @@ export default function ExperienceSection() {
                 {/* Timeline Connector Dot */}
                 <div className={`
                     absolute -left-[41px] top-0 
-                    w-10 h-10 rounded-full border-4 border-slate-50 
+                    w-10 h-10 rounded-full border-4 border-slate-50 dark:border-slate-950
                     flex items-center justify-center
                     transition-all duration-300
-                    ${index === 0 ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/30 scale-110' : 'bg-white text-slate-400 border-slate-200 group-hover:border-teal-400 group-hover:text-teal-600'}
+                    ${index === 0 ? 'bg-teal-600 dark:bg-teal-500 text-white dark:text-slate-950 shadow-lg shadow-teal-600/30 scale-110' : 'bg-white dark:bg-slate-900 text-slate-400 dark:text-slate-500 border-slate-200 dark:border-slate-800 group-hover:border-teal-400 group-hover:text-teal-600 dark:group-hover:text-teal-400'}
                 `}>
                     {index === 0 && (
                         <span className="absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-20 animate-ping"></span>
@@ -131,21 +147,21 @@ export default function ExperienceSection() {
                 </div>
 
                 {/* Content Card */}
-                <div className="flex flex-col items-start bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow w-full">
+                <div className="flex flex-col items-start bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow w-full">
                    <div className="flex flex-wrap justify-between w-full mb-2">
-                       <h3 className="text-xl font-bold text-slate-800 group-hover:text-teal-700 transition-colors">
+                       <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
                           {item.title}
                        </h3>
-                       <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 bg-slate-50 px-2 py-1 rounded">
+                       <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-1 rounded">
                           <Calendar size={12} /> {item.year}
                        </span>
                    </div>
                    
-                   <span className="text-sm font-semibold text-teal-600 mb-3">
+                   <span className="text-sm font-semibold text-teal-600 dark:text-teal-400 mb-3">
                       {item.company}
                    </span>
                    
-                   <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                   <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm md:text-base">
                       {item.desc}
                    </p>
                 </div>
@@ -155,16 +171,16 @@ export default function ExperienceSection() {
         </div>
 
         {/* --- PART 2: VISUAL GALLERY (Full Width) --- */}
-        <div className="relative w-full border-t border-slate-200 pt-16">
+        <div className="relative w-full border-t border-slate-200 dark:border-slate-800 pt-16">
             {/* Transition Title */}
             <div className="text-center mb-12">
-                <div className="inline-flex items-center justify-center p-3 bg-white rounded-full shadow-sm border border-slate-100 mb-4 text-teal-600">
+                <div className="inline-flex items-center justify-center p-3 bg-white dark:bg-slate-900 rounded-full shadow-sm border border-slate-100 dark:border-slate-800 mb-4 text-teal-600 dark:text-teal-400">
                     <ArrowDown size={20} className="animate-bounce" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-800">
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-white">
                     Visual Highlights
                 </h3>
-                <p className="text-slate-500 mt-2">
+                <p className="text-slate-500 dark:text-slate-400 mt-2">
                     A closer look at my hackathons, certifications, and training.
                 </p>
             </div>
@@ -175,7 +191,7 @@ export default function ExperienceSection() {
             </div>
 
             {/* Background Blob for the Gallery Area */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] bg-teal-50/50 blur-[100px] -z-10 rounded-full mix-blend-multiply pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[500px] bg-teal-50/50 dark:bg-teal-950/20 blur-[100px] -z-10 rounded-full mix-blend-multiply dark:mix-blend-screen pointer-events-none" />
         </div>
       </div>
     </section>

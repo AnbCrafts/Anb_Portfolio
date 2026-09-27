@@ -11,12 +11,35 @@ import hero10 from './hero10.png'
 import trackForge from './trackforge.png'
 import fitForWork from './fitforwork.png'
 import codeSage from './codesage.png'
+import nirman from './nirman.png'
 import demo from './demo.mp4'
 import hire from './hire.png'
 import hire2 from './hire2.png'
 import ffw from './ffw.png'
 import ffw2 from './ffw2.png'
 import workflow from './workflow.png'
+import anbPortfolio from './anbPortfolio.jpg'
+
 export const assets = {
- workflow,hire,hire2,demo,trackForge,codeSage,fitForWork,hero10,  hero1,hero2,hero3,hero4,hero5,hero6,hero7,hero9,hero8,ffw,ffw2
+  anbPortfolio,
+  workflow,
+  hire: anbPortfolio,
+  hire2: anbPortfolio,
+  demo,
+  trackForge,
+  codeSage,
+  nirman,
+  fitForWork,
+  hero10,
+  hero1: anbPortfolio,
+  hero2,
+  hero3: anbPortfolio,
+  hero4,
+  hero5,
+  hero6,
+  hero7,
+  hero9,
+  hero8: anbPortfolio,
+  ffw,
+  ffw2
 }

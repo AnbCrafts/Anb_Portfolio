@@ -81,23 +81,23 @@ export default function Stories() {
   };
 
   return (
-    <section className="w-full bg-slate-50 py-24 px-6 lg:px-8">
+    <section className="w-full bg-slate-50 dark:bg-slate-950 py-24 px-6 lg:px-8 text-slate-900 dark:text-slate-100 transition-colors duration-300 min-h-screen">
       <div className="max-w-7xl mx-auto">
         {/* --- HERO HEADER --- */}
-        <div className="text-center mb-16 max-w-3xl mx-auto">
+        <div className="text-center mb-16 max-w-3xl mx-auto pt-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-teal-100 text-teal-700 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-teal-100 dark:border-teal-900 text-teal-700 dark:text-teal-400 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
                 <BookOpen size={14} /> My Journey
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
-              Behind the <span className="text-teal-600">Code</span>
+            <h1 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6">
+              Behind the <span className="text-teal-600 dark:text-teal-400">Code</span>
             </h1>
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed">
               Software engineering is more than just typing syntax. It's about the experiences, 
               the pressure of hackathons, and the discipline of continuous learning.
             </p>
@@ -116,7 +116,7 @@ export default function Stories() {
             <motion.div
               key={story.id}
               variants={cardVariants}
-              className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 hover:border-teal-200 transition-all duration-300"
+              className="group flex flex-col bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/60 hover:border-teal-200 dark:hover:border-teal-800 transition-all duration-300"
             >
               {/* IMAGE HEADER */}
               <div className="relative h-56 overflow-hidden">
@@ -139,28 +139,28 @@ export default function Stories() {
               {/* CARD BODY */}
               <div className="p-6 flex flex-col flex-grow">
                 {/* Meta Data */}
-                <div className="flex items-center gap-4 text-xs font-medium text-slate-500 mb-3">
+                <div className="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400 mb-3">
                    <div className="flex items-center gap-1">
-                      <Calendar size={14} className="text-teal-500" /> {story.year}
+                      <Calendar size={14} className="text-teal-500 dark:text-teal-400" /> {story.year}
                    </div>
-                   <div className="w-1.5 h-1.5 bg-slate-300 rounded-full" />
+                   <div className="w-1.5 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full" />
                    <div className="flex items-center gap-1">
-                      <MapPin size={14} className="text-teal-500" /> {story.location}
+                      <MapPin size={14} className="text-teal-500 dark:text-teal-400" /> {story.location}
                    </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-teal-700 transition-colors">
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-teal-700 dark:group-hover:text-teal-400 transition-colors">
                   {story.title}
                 </h3>
 
-                <p className="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
                   {story.short}
                 </p>
 
                 {/* READ MORE LINK */}
                 <a
                   href={`/stories/${story.slug}`}
-                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-teal-600 transition-colors mt-auto group/link"
+                  className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 dark:text-teal-400 hover:text-teal-600 dark:hover:text-teal-300 transition-colors mt-auto group/link"
                 >
                   Read Full Story 
                   <ArrowRight size={16} className="transition-transform duration-300 group-hover/link:translate-x-1" />

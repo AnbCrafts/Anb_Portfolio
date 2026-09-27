@@ -1,17 +1,44 @@
 import { motion } from "framer-motion";
 import { Github, Linkedin, Twitter, Mail, ArrowUp, Heart } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Footer() {
-  
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const handleNavClick = (id) => {
+    if (location.pathname === "/") {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", `/#${id}`);
+      }
+    } else {
+      navigate(`/#${id}`);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+    }
+  };
+
+  const navLinks = [
+    { name: "Home", id: "home" },
+    { name: "About", id: "about" },
+    { name: "Projects", id: "projects" },
+    { name: "Experience", id: "experience" },
+    { name: "Contact", id: "contact" },
+  ];
 
   const socialLinks = [
     { icon: <Github size={20} />, href: "https://github.com/AnbCrafts", label: "GitHub" },
     { icon: <Linkedin size={20} />, href: "https://linkedin.com", label: "LinkedIn" },
     { icon: <Twitter size={20} />, href: "https://twitter.com", label: "Twitter" },
-    { icon: <Mail size={20} />, href: "mailto:yourmail@gmail.com", label: "Email" },
+    { icon: <Mail size={20} />, href: "mailto:anubhawgupta664@gmail.com", label: "Email" },
   ];
 
   return (
@@ -40,11 +67,16 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-bold text-white mb-4">Navigation</h4>
             <ul className="space-y-2 text-slate-400">
-              <li><a href="#home" className="hover:text-teal-400 transition-colors inline-block">Home</a></li>
-              <li><a href="#about" className="hover:text-teal-400 transition-colors inline-block">About</a></li>
-              <li><a href="#projects" className="hover:text-teal-400 transition-colors inline-block">Projects</a></li>
-              <li><a href="#experience" className="hover:text-teal-400 transition-colors inline-block">Experience</a></li>
-              <li><a href="#contact" className="hover:text-teal-400 transition-colors inline-block">Contact</a></li>
+              {navLinks.map((link, i) => (
+                <li key={i}>
+                  <button
+                    onClick={() => handleNavClick(link.id)}
+                    className="hover:text-teal-400 transition-colors inline-block text-left cursor-pointer"
+                  >
+                    {link.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -86,7 +118,7 @@ export default function Footer() {
 
           <button 
             onClick={scrollToTop}
-            className="group flex items-center gap-2 text-slate-400 hover:text-teal-400 transition-colors"
+            className="group flex items-center gap-2 text-slate-400 hover:text-teal-400 transition-colors cursor-pointer"
           >
             Back to Top
             <div className="p-1.5 bg-slate-900 rounded-md border border-slate-800 group-hover:border-teal-500 transition-colors">

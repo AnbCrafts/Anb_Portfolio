@@ -77,13 +77,13 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contact" className="relative w-full bg-white py-24 px-6 lg:px-8 overflow-hidden">
+    <section id="contact" className="relative w-full bg-white dark:bg-slate-900 py-16 md:py-20 px-6 lg:px-8 overflow-hidden transition-colors duration-300">
       
       {/* Toast Notification Container */}
       <Toaster position="bottom-right" reverseOrder={false} />
 
       {/* Abstract Background Decoration */}
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-teal-50/50 rounded-full blur-[100px] -z-10" />
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-teal-50/50 dark:bg-teal-950/20 rounded-full blur-[100px] -z-10" />
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -96,15 +96,15 @@ export default function ContactSection() {
         >
            <div className="flex items-center gap-2 mb-6">
              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-             <span className="text-sm font-semibold text-teal-600 tracking-wide uppercase">Available for work</span>
+             <span className="text-sm font-semibold text-teal-600 dark:text-teal-400 tracking-wide uppercase">Available for work</span>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
             Let's build something <br />
-            <span className="text-teal-600">extraordinary.</span>
+            <span className="text-teal-600 dark:text-teal-400">extraordinary.</span>
           </h2>
 
-          <p className="text-slate-600 text-lg mb-10 leading-relaxed max-w-lg">
+          <p className="text-slate-600 dark:text-slate-300 text-lg mb-10 leading-relaxed max-w-lg">
             Whether you have a project in mind, need a full-stack consultant, or just want to chat about tech—I'm actively looking for new opportunities.
           </p>
 
@@ -117,23 +117,23 @@ export default function ContactSection() {
                 target="_blank"
                 rel="noreferrer"
                 className={`
-                   group flex items-center gap-4 p-4 rounded-xl border border-slate-200 bg-white shadow-sm transition-all duration-300
+                   group flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm transition-all duration-300
                    ${link.color}
                 `}
               >
-                <div className="p-3 rounded-lg bg-slate-50 text-slate-600 group-hover:bg-white group-hover:scale-110 transition-transform">
+                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 group-hover:bg-white dark:group-hover:bg-slate-800 group-hover:scale-110 transition-transform">
                   {link.icon}
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">{link.name}</p>
-                  <p className="text-sm font-semibold text-slate-800">{link.value}</p>
+                  <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{link.name}</p>
+                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{link.value}</p>
                 </div>
-                <ArrowRight className="ml-auto w-5 h-5 text-slate-300 group-hover:text-current transition-colors opacity-0 group-hover:opacity-100" />
+                <ArrowRight className="ml-auto w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-current transition-colors opacity-0 group-hover:opacity-100" />
               </a>
             ))}
           </div>
           
-          <div className="mt-10 flex items-center gap-2 text-slate-500 text-sm">
+          <div className="mt-10 flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
              <MapPin size={16} /> Based in Kolkata, India • Open to Remote
           </div>
         </motion.div>
@@ -146,51 +146,51 @@ export default function ContactSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative"
         >
-           <div className="absolute inset-0 bg-teal-600 rounded-2xl rotate-3 translate-x-2 translate-y-2 opacity-10" />
+           <div className="absolute inset-0 bg-teal-600 dark:bg-teal-500 rounded-2xl rotate-3 translate-x-2 translate-y-2 opacity-10" />
 
            {/* FORM START */}
            <form 
              ref={formRef} 
              onSubmit={sendEmail} 
-             className="relative bg-white border border-slate-100 p-8 md:p-10 rounded-2xl shadow-2xl shadow-slate-200/50"
+             className="relative bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 p-8 md:p-10 rounded-2xl shadow-2xl shadow-slate-200/50 dark:shadow-black/60"
            >
              
-             <h3 className="text-2xl font-bold text-slate-800 mb-6">Send a message</h3>
+             <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Send a message</h3>
 
              <div className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Name</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Name</label>
                   <input
                     name="user_name" // Required by EmailJS
                     type="text"
                     required
                     placeholder="John Doe"
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
                   />
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Email</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Email</label>
                   <input
                     name="user_email" // Required by EmailJS
                     type="email"
                     required
                     placeholder="john@example.com"
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all"
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
                   />
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Message</label>
                   <textarea
                     name="message" // Required by EmailJS
                     required
                     rows="4"
                     placeholder="Tell me about your project..."
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all resize-none"
+                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-none"
                   ></textarea>
                 </div>
 
@@ -202,7 +202,7 @@ export default function ContactSection() {
                   type="submit"
                   className={`
                     w-full font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all
-                    ${isSending ? "bg-slate-400 cursor-not-allowed" : "bg-slate-900 text-white hover:bg-teal-600"}
+                    ${isSending ? "bg-slate-400 dark:bg-slate-700 cursor-not-allowed" : "bg-slate-900 dark:bg-teal-500 text-white dark:text-slate-950 hover:bg-teal-600 dark:hover:bg-teal-400"}
                   `}
                 >
                   {isSending ? (

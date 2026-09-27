@@ -3,62 +3,47 @@ import { assets } from "../assets/assets";
 
 export const frontend = [
   {
-    title: "Portfolio v2",
-    desc: "A minimal SaaS-inspired portfolio with smooth animations and teal aesthetics.",
-    image: assets.hero1,
-    video: assets.demo,
-    keywords: ["React", "Tailwind", "Framer Motion"],
-    preview: "/",
-    repo: "https://github.com/anubhaw/portfolio-v2"
-  },
-
-  {
-    title: "Animated Login UI",
-    desc: "A modern animated login/signup interface with motion transitions and glass morphism.",
-    image: assets.hero2,
-    video: assets.demo,
-    keywords: ["React", "Framer Motion", "UI/UX"],
-    preview: "/login",
-    repo: "https://github.com/anubhaw/login-ui"
-  },
-
-  {
-    title: "Dashboard UI Kit",
-    desc: "A reusable UI kit with cards, charts, modals and layouts for rapid dashboard building.",
-    image: assets.hero3,
-    video: assets.demo,
-    keywords: ["React", "Tailwind", "Reusable Components"],
-    preview: "/ui-kit",
-    repo: "https://github.com/anubhaw/ui-kit"
-  },
-
-  {
-    title: "Weather App",
-    desc: "A clean gradient-based weather UI with live API fetching.",
+    title: "College Website",
+    desc: "A clean, responsive frontend college portal interface designed with HTML5, CSS3, JavaScript, and modern UI components.",
     image: assets.hero4,
-    video: assets.demo,
-    keywords: ["React", "API", "UI Design"],
-    preview: "/weather",
-    repo: "https://github.com/anubhaw/weather-app"
+    keywords: ["HTML5", "CSS3", "JavaScript", "Responsive UI"],
+    preview: "",
+    repo: "https://github.com/AnbCrafts/College-Website.git"
   },
 
   {
-    title: "Music Player UI",
-    desc: "A modern music player UI with animations, playlists and responsive layout.",
+    title: "Beyond-Blue Showcase",
+    desc: "A modern web design showcase recreating agency layout aesthetics, smooth scroll micro-interactions, and gradient visual elements.",
+    image: assets.hero2,
+    keywords: ["HTML5", "CSS3", "JavaScript", "UI/UX Design"],
+    preview: "",
+    repo: "https://github.com/AnbCrafts/Beyond-Blue.git"
+  },
+
+  {
+    title: "E-Commerce UI",
+    desc: "A modern frontend e-commerce interface featuring responsive product grids, interactive category filters, cart modals, and glassmorphism styling.",
+    image: assets.hero7,
+    keywords: ["React", "Tailwind CSS", "Redux Toolkit", "UI/UX Design"],
+    preview: "",
+    repo: "https://github.com/AnbCrafts/E-Commerce.git"
+  },
+
+  {
+    title: "Portfolio v2 UI",
+    desc: "A minimal SaaS-inspired portfolio frontend with smooth animations and teal aesthetics.",
+    image: assets.hero1,
+    keywords: ["React", "Tailwind CSS", "Framer Motion"],
+    preview: "/",
+    repo: "https://github.com/AnbCrafts/Anb_Portfolio.git"
+  },
+
+  {
+    title: "Spotify Clone UI",
+    desc: "A modern music player web UI with custom player controls, responsive layouts, and dynamic playlist cards.",
     image: assets.hero5,
-    video: assets.demo,
-    keywords: ["React", "Audio API", "Animations"],
-    preview: "/music-player",
-    repo: "https://github.com/anubhaw/music-player"
-  },
-
-  {
-    title: "Cards & Components Showcase",
-    desc: "A collection of modern card layouts and micro-interaction components.",
-    image: assets.hero6,
-    video: assets.demo,
-    keywords: ["React", "UI/UX", "Tailwind"],
-    preview: "/components",
-    repo: "https://github.com/anubhaw/component-showcase"
+    keywords: ["React", "Audio Web API", "Tailwind CSS"],
+    preview: "",
+    repo: "https://github.com/AnbCrafts/Spotify-Clone.git"
   }
 ];

@@ -4,61 +4,46 @@ import { assets } from "../assets/assets";
 export const fullstack = [
   {
     title: "TrackForge",
-    desc: "A complete bug tracking + team management platform with roles, dashboards, status workflows and analytics.",
+    desc: "A complete bug tracking & sprint management platform featuring Groq Llama 3.3 AI code analysis, multi-role access control (RBAC), real-time collaborative workspace rooms, sprint analytics, and customizable kanban status workflows.",
     image: assets.trackForge,
-    video: assets.demo,
-    keywords: ["MERN", "JWT Auth", "Charts", "Team Management"],
-    preview: "",
-    repo: "https://github.com/anubhaw/trackforge"
+    keywords: ["MERN Stack", "Groq Llama 3.3 AI", "Socket.io", "Recharts", "Tailwind CSS", "JWT Auth"],
+    preview: "https://trackforge-client-qpdy.onrender.com/",
+    repo: "https://github.com/AnbCrafts/TrackForge.git"
   },
 
   {
-    title: "FitForWork",
-    desc: "A job application tracking platform with resume scoring, analytics and career insights.",
-    image: assets.fitForWork,
-    video: assets.demo,
-    keywords: ["React", "MongoDB", "Express", "Charts"],
-    preview: "",
-    repo: "https://github.com/anubhaw/fitforwork"
+    title: "Nirman.AI (Website Builder)",
+    desc: "An autonomous multi-agent AI website generator powered by Google Gemini. Features a 4-stage AI architecture (Plan, Code, Refine, Audit), in-browser Monaco Studio IDE, real-time iframe preview staging, and full-stack web application compilation.",
+    image: assets.nirman,
+    keywords: ["React", "Node.js", "Express", "Google Gemini AI", "Monaco Editor", "Tailwind CSS"],
+    preview: "https://website-builder-client-r1q9.onrender.com",
+    repo: "https://github.com/AnbCrafts/Website-Builder-Client.git"
   },
 
   {
     title: "CodeSage AI",
-    desc: "An AI-powered coding assistant that generates, explains and debugs code snippets.",
+    desc: "An AI-powered developer assistant powered by Llama 3 70B models. Features automated code explanation, line-by-line syntax breakdown, Big O complexity analysis, multi-language code translation, and unit test generation.",
     image: assets.codeSage,
-    video: assets.demo,
-    keywords: ["AI", "Node.js", "React", "OpenAI API"],
-    preview: "",
-    repo: "https://github.com/anubhaw/codesage"
+    keywords: ["MERN Stack", "Llama 3 70B", "Groq AI API", "Monaco Editor", "Tailwind CSS"],
+    preview: "https://codesage-client.onrender.com/",
+    repo: "https://github.com/AnbCrafts/CodeSage.git"
   },
 
   {
-    title: "E-Commerce System",
-    desc: "A scalable MERN-based ecommerce platform with authentication, cart, orders and admin dashboard.",
-    image: assets.hero7,
-    video: assets.demo,
-    keywords: ["Node.js", "MongoDB", "Stripe", "Admin Dashboard"],
-    preview: "",
-    repo: "https://github.com/anubhaw/ecommerce"
-  },
-
-  {
-    title: "College Management System",
-    desc: "A full management system with student portal, assignments, grading and role-based access.",
-    image: assets.hero8,
-    video: assets.demo,
-    keywords: ["MERN", "RBAC", "Database Modeling"],
-    preview: "",
-    repo: "https://github.com/anubhaw/cms"
-  },
-
-  {
-    title: "Social Media App",
-    desc: "A full-stack social media platform with posts, likes, comments and real-time notifications.",
+    title: "Tomato (Food Ordering Platform)",
+    desc: "A full-stack food ordering platform featuring real-time cart management, interactive menu browsing, user authentication, order processing, and an administrative control panel.",
     image: assets.hero9,
-    video: assets.demo,
-    keywords: ["MERN", "Socket.io", "Cloudinary"],
+    keywords: ["MERN Stack", "React", "Node.js", "MongoDB", "Express", "Stripe"],
     preview: "",
-    repo: "https://github.com/anubhaw/socialapp"
+    repo: "https://github.com/AnbCrafts/Tomato.git"
+  },
+
+  {
+    title: "Library Management System",
+    desc: "A full-stack web platform with dedicated User and Admin panels for catalog browsing, membership management, inventory tracking, and automated book issue/return operations.",
+    image: assets.hero8,
+    keywords: ["MERN Stack", "React", "Node.js", "MongoDB", "RBAC"],
+    preview: "",
+    repo: "https://github.com/AnbCrafts/Library-Management.git"
   }
 ];

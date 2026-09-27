@@ -4,6 +4,7 @@ import { submitContactForm, resetContactStatus } from "../Store/portfolioStore";
 import { motion } from "framer-motion";
 import { Mail, User, Send } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
+import { Link } from "react-router-dom";
 
 export default function ContactForm() {
   const dispatch = useDispatch();
@@ -95,7 +96,7 @@ export default function ContactForm() {
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <small className="text-gray-500">Prefer a call? <a className="text-teal-700 cursor-pointer">Book a slot</a></small>
+        <small className="text-gray-500">Prefer a call? <Link to="/hire" className="text-teal-700 font-semibold cursor-pointer">Book a slot</Link></small>
         <button
           type="submit"
           disabled={isLoading}

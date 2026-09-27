@@ -8,11 +8,16 @@ import Home from './Pages/Home'
 import Footer from './Components/Footer'
 import Header from './Components/Header'
 import SectionWrapper from './Components/SectionWrapper'
+import ScrollToTop from './Components/ScrollToTop'
+import ScrollProgress from './Components/ScrollProgress'
+import AnalyticsTracker from './Components/AnalyticsTracker'
 import HireMe from './Pages/Hire'
 import ProjectsPage from './Pages/ProjectPage'
 import AboutPage from './Pages/AboutPage'
 import Stories from './Pages/Stories'
 import StoryPage from './Pages/SingleStory'
+import BlogsPage from './Pages/BlogsPage'
+import BlogDetail from './Pages/BlogDetail'
 import NotFound from './Pages/NotFound'
 
 const App = () => {
@@ -23,8 +28,10 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <div>
-
+    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      <AnalyticsTracker />
+      <ScrollProgress />
+      <ScrollToTop />
       <Routes>
 
         {/* ================================
@@ -66,6 +73,26 @@ const App = () => {
             <>
               <Header />
               <AboutPage />
+              <SectionWrapper><Footer /></SectionWrapper>
+            </>
+          }
+        />
+        <Route
+          path='/blogs'
+          element={
+            <>
+              <Header />
+              <BlogsPage />
+              <SectionWrapper><Footer /></SectionWrapper>
+            </>
+          }
+        />
+        <Route
+          path='/blog/:slug'
+          element={
+            <>
+              <Header />
+              <BlogDetail />
               <SectionWrapper><Footer /></SectionWrapper>
             </>
           }

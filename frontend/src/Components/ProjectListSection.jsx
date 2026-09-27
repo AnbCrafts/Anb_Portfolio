@@ -11,10 +11,14 @@ export default function ProjectListSection({ type }) {
   const dbProjects = useSelector((state) => state.portfolio.projects);
 
   // Filter projects by category type
-  const catDbProjects = dbProjects.filter((p) => p.category === type);
-
-  // Choose list
-  const list = catDbProjects.length > 0 ? catDbProjects : (type === "frontend" ? frontend : fullstack);
+  const list = dbProjects.length > 0 
+    ? dbProjects.filter((p) => {
+        const cat = (p.category || "").toLowerCase();
+        if (type === "frontend") return cat === "frontend" || cat === "ui";
+        if (type === "fullstack") return cat === "fullstack" || cat === "ai" || cat === "backend" || cat === "saas" || !cat;
+        return true;
+      })
+    : (type === "frontend" ? frontend : fullstack);
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6 lg:px-8">
