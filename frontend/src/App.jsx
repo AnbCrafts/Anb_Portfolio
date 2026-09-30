@@ -20,6 +20,8 @@ import BlogsPage from './Pages/BlogsPage'
 import BlogDetail from './Pages/BlogDetail'
 import NotFound from './Pages/NotFound'
 
+import CustomCursor from './Components/CustomCursor'
+
 const App = () => {
   const dispatch = useDispatch()
 
@@ -28,7 +30,8 @@ const App = () => {
   }, [dispatch])
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+    <div className="min-h-screen bg-[#050315] text-[#fbfbfe] selection:bg-[#433bff] selection:text-white transition-colors duration-300">
+      <CustomCursor />
       <AnalyticsTracker />
       <ScrollProgress />
       <ScrollToTop />

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import { assets } from "../assets/assets";
-import { ArrowRight, ArrowLeft, Github, ExternalLink, Layers } from "lucide-react";
+import { ArrowRight, ArrowLeft, Github, ExternalLink, Layers, Sparkles } from "lucide-react";
+import Spotlight3DCard from "./Spotlight3DCard";
 
 const getFallbackImage = (title, image) => {
   if (!title) return image || assets.anbPortfolio;
@@ -24,7 +25,7 @@ const topProjectsFallback = [
     keywords: ["MERN Stack", "Groq Llama 3.3 AI", "Socket.io", "Recharts", "Tailwind CSS"],
     preview: "https://trackforge-client-qpdy.onrender.com/",
     repo: "https://github.com/AnbCrafts/TrackForge.git",
-    color: "bg-blue-500"
+    color: "from-blue-600 to-indigo-600"
   },
   {
     id: 2,
@@ -36,7 +37,7 @@ const topProjectsFallback = [
     keywords: ["React", "Node.js", "Express", "Google Gemini AI", "Monaco Editor"],
     preview: "https://website-builder-client-r1q9.onrender.com",
     repo: "https://github.com/AnbCrafts/Website-Builder-Client.git",
-    color: "bg-emerald-500"
+    color: "from-emerald-600 to-teal-600"
   },
   {
     id: 3,
@@ -48,7 +49,7 @@ const topProjectsFallback = [
     keywords: ["MERN Stack", "Llama 3 70B", "Groq AI API", "Monaco Editor", "Tailwind CSS"],
     preview: "https://codesage-client.onrender.com/",
     repo: "https://github.com/AnbCrafts/CodeSage.git",
-    color: "bg-purple-500"
+    color: "from-purple-600 to-indigo-600"
   }
 ];
 
@@ -86,178 +87,222 @@ export default function TopProjectsGallery() {
   // Animation Variants
   const slideVariants = {
     enter: (dir) => ({
-      x: dir > 0 ? 30 : -30,
-      opacity: 0
+      x: dir > 0 ? 40 : -40,
+      opacity: 0,
+      scale: 0.96
     }),
     center: {
       zIndex: 1,
       x: 0,
-      opacity: 1
+      opacity: 1,
+      scale: 1
     },
     exit: (dir) => ({
       zIndex: 0,
-      x: dir < 0 ? 30 : -30,
-      opacity: 0
+      x: dir < 0 ? 40 : -40,
+      opacity: 0,
+      scale: 0.96
     })
   };
 
   return (
-    <section className="w-full py-20 bg-white dark:bg-slate-900 relative overflow-hidden transition-colors duration-300">
+    <section className="w-full py-24 bg-[#050315] text-[#fbfbfe] relative overflow-hidden transition-colors duration-300">
       
-      {/* Background Decor (Clipped) */}
+      {/* Background Atmosphere Beams & Glows */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-50 dark:bg-teal-950/20 rounded-full blur-3xl opacity-50 translate-x-1/3 -translate-y-1/3" />
+        {/* Subtle Radial Glows from Realtime Colors */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#433bff]/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[#2f27ce]/10 rounded-full blur-[140px]" />
+        
+        {/* Grid Pattern Overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]" 
+          style={{ 
+            backgroundImage: `radial-gradient(circle at 1px 1px, #dedcff 1px, transparent 0)`, 
+            backgroundSize: '32px 32px' 
+          }} 
+        />
       </div>
       
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         
-        {/* Header */}
-        <div className="mb-12 flex items-end justify-between">
-            <div>
-                <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
-                    Flagship <span className="text-teal-600 dark:text-teal-400">Projects</span>
-                </h2>
-                <div className="w-20 h-1 bg-teal-600 dark:bg-teal-400 mt-4 rounded-full" />
+        {/* Section Header */}
+        <div className="mb-14 flex items-end justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-[#38bdf8] text-xs font-bold uppercase tracking-widest mb-3">
+              <Sparkles size={14} className="animate-pulse" /> Flagship Engineering
             </div>
-            
-            {/* Desktop Controls (Arrows) */}
-            <div className="hidden md:flex gap-3">
-                <button onClick={handlePrev} className="p-3 rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-teal-400 dark:hover:border-teal-500 transition-all">
-                    <ArrowLeft size={20} className="text-slate-600 dark:text-slate-300" />
-                </button>
-                <button onClick={handleNext} className="p-3 rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:border-teal-400 dark:hover:border-teal-500 transition-all">
-                    <ArrowRight size={20} className="text-slate-600 dark:text-slate-300" />
-                </button>
-            </div>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-[#fbfbfe] tracking-tight">
+              Featured <span className="bg-gradient-to-r from-[#38bdf8] via-[#433bff] to-[#a78bfa] bg-clip-text text-transparent">Flagship Projects</span>
+            </h2>
+            <div className="w-24 h-1.5 bg-gradient-to-r from-[#433bff] to-[#38bdf8] mt-4 rounded-full" />
+          </div>
+          
+          {/* Desktop Controls (Interactive Buttons) */}
+          <div className="hidden md:flex gap-4">
+            <button 
+              onClick={handlePrev} 
+              className="p-3.5 rounded-xl border border-slate-800 bg-[#0b0f19]/80 backdrop-blur-md hover:bg-[#433bff]/20 hover:border-[#38bdf8] transition-all duration-300 group shadow-lg"
+              aria-label="Previous Project"
+            >
+              <ArrowLeft size={20} className="text-[#dedcff] group-hover:-translate-x-1 transition-transform" />
+            </button>
+            <button 
+              onClick={handleNext} 
+              className="p-3.5 rounded-xl border border-slate-800 bg-[#0b0f19]/80 backdrop-blur-md hover:bg-[#433bff]/20 hover:border-[#38bdf8] transition-all duration-300 group shadow-lg"
+              aria-label="Next Project"
+            >
+              <ArrowRight size={20} className="text-[#dedcff] group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
         </div>
 
-        {/* MAIN SLIDER CONTENT */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-12 lg:gap-16 items-center">
-            
-            {/* --- LEFT: VIDEO/IMAGE MONITOR --- */}
-            <div className="relative w-full aspect-video bg-slate-100 dark:bg-slate-950 rounded-xl shadow-2xl shadow-slate-300/50 dark:shadow-black/60 border border-slate-200 dark:border-slate-800 overflow-hidden group">
-                {/* Browser Toolbar Mockup */}
-                <div className="absolute top-0 left-0 w-full h-8 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center px-3 gap-1.5 z-10">
-                    <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                    <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
-                    <div className="ml-4 flex-1 h-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded text-[10px] flex items-center px-2 text-slate-400 dark:text-slate-500 font-mono">
-                        {active.preview ? active.preview : "localhost:3000"}
-                    </div>
+        {/* MAIN SLIDER CONTENT WITH 3D SPOTLIGHT CARD */}
+        <Spotlight3DCard 
+          glowColor="rgba(67, 59, 255, 0.3)" 
+          spotlightColor="rgba(56, 189, 248, 0.15)"
+          className="p-1 sm:p-2 bg-[#0b0f19]/80 backdrop-blur-xl border border-slate-800/80 shadow-2xl shadow-black/80"
+        >
+          <div className="p-6 md:p-10 rounded-2xl grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-10 lg:gap-14 items-center">
+              
+            {/* --- LEFT: VIDEO/IMAGE BROWSER MONITOR WITH 3D TILT --- */}
+            <div className="relative w-full aspect-video bg-[#050315] rounded-xl shadow-2xl border border-slate-800/80 overflow-hidden group">
+              {/* Browser Header Bar */}
+              <div className="absolute top-0 left-0 w-full h-9 bg-[#0b0f19] border-b border-slate-800/80 flex items-center px-4 gap-2 z-10">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <div className="ml-4 flex-1 h-5 bg-[#050315] border border-slate-800/80 rounded-md text-[11px] flex items-center px-3 text-[#dedcff]/60 font-mono tracking-wide overflow-hidden whitespace-nowrap">
+                  {active.preview ? active.preview : "https://localhost:3000"}
                 </div>
+              </div>
 
-                {/* Video or Image Content with Animation */}
-                <div className="w-full h-full pt-8 bg-slate-50 dark:bg-slate-950">
-                    <AnimatePresence mode="wait" custom={direction}>
-                        <motion.div
-                            key={currentIndex}
-                            custom={direction}
-                            variants={slideVariants}
-                            initial="enter"
-                            animate="center"
-                            exit="exit"
-                            transition={{ duration: 0.4, ease: "easeInOut" }}
-                            className="w-full h-full"
-                        >
-                            {active.video ? (
-                                <video
-                                    src={active.video}
-                                    autoPlay
-                                    loop
-                                    muted
-                                    playsInline
-                                    className="w-full h-full object-cover"
-                                />
-                            ) : (
-                                <img
-                                    src={active.image}
-                                    alt={active.title}
-                                    className="w-full h-full object-cover object-top"
-                                />
-                            )}
-                        </motion.div>
-                    </AnimatePresence>
-                </div>
+              {/* Animated Media Display */}
+              <div className="w-full h-full pt-9 bg-[#050315]">
+                <AnimatePresence mode="wait" custom={direction}>
+                  <motion.div
+                    key={currentIndex}
+                    custom={direction}
+                    variants={slideVariants}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    className="w-full h-full relative"
+                  >
+                    {active.video ? (
+                      <video
+                        src={active.video}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <img
+                        src={active.image}
+                        alt={active.title}
+                        className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                      />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#050315]/40 via-transparent to-transparent pointer-events-none" />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
-
 
             {/* --- RIGHT: PROJECT DETAILS --- */}
-            <div className="flex flex-col justify-center h-full relative">
-                
-                {/* Large Background Number for style */}
-                <span className="absolute -top-10 -right-0 text-[180px] font-bold text-slate-100/80 dark:text-slate-800/40 -z-10 leading-none select-none">
-                    0{currentIndex + 1}
-                </span>
+            <div className="flex flex-col justify-center h-full relative z-20">
+              
+              {/* Background Index Counter Watermark */}
+              <span className="absolute -top-12 right-0 text-[140px] font-black text-slate-800/20 select-none pointer-events-none leading-none">
+                0{currentIndex + 1}
+              </span>
 
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={currentIndex}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.35, ease: "easeOut" }}
+                >
+                  {/* Technology Tags */}
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {active.keywords.map((k, i) => (
+                      <span 
+                        key={i} 
+                        className="px-3 py-1 bg-[#433bff]/15 text-[#38bdf8] border border-[#433bff]/30 text-[11px] font-bold uppercase tracking-wider rounded-lg shadow-sm"
+                      >
+                        {k}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Title & Subtitle */}
+                  <h3 className="text-3xl md:text-4xl font-extrabold text-[#fbfbfe] mb-2 leading-tight">
+                    {active.title}
+                  </h3>
+                  <p className="text-base font-semibold text-[#38bdf8] mb-4">
+                    {active.subtitle}
+                  </p>
+
+                  {/* Description */}
+                  <p className="text-[#dedcff]/80 text-base leading-relaxed mb-8">
+                    {active.desc}
+                  </p>
+
+                  {/* Action Buttons */}
+                  <div className="flex items-center gap-4 flex-wrap">
+                    {active.preview ? (
+                      <a
+                        href={active.preview}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-2 bg-gradient-to-r from-[#433bff] to-[#2f27ce] text-white px-6 py-3 rounded-xl font-semibold hover:from-[#38bdf8] hover:to-[#433bff] transition-all duration-300 shadow-lg shadow-[#433bff]/25 hover:shadow-[#38bdf8]/40 hover:scale-[1.02]"
+                      >
+                        Live Preview <ExternalLink size={18} />
+                      </a>
+                    ) : (
+                      <span className="flex items-center gap-2 bg-slate-800/80 text-slate-500 px-6 py-3 rounded-xl font-semibold cursor-not-allowed border border-slate-700/50">
+                        Coming Soon <Layers size={18} />
+                      </span>
+                    )}
+
+                    <a
+                      href={active.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-2 border border-slate-700/80 bg-[#0b0f19]/90 text-[#dedcff] px-6 py-3 rounded-xl font-semibold hover:bg-slate-800/80 hover:border-[#38bdf8] transition-all duration-300 hover:scale-[1.02]"
                     >
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {active.keywords.map((k, i) => (
-                                <span key={i} className="px-3 py-1 bg-teal-50 dark:bg-teal-950/60 text-teal-700 dark:text-teal-400 border border-teal-100 dark:border-teal-900 text-xs font-bold uppercase tracking-wide rounded-md">
-                                    {k}
-                                </span>
-                            ))}
-                        </div>
+                      <Github size={18} /> Source Code
+                    </a>
+                  </div>
 
-                        {/* Titles */}
-                        <h3 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">
-                            {active.title}
-                        </h3>
-                        <p className="text-lg font-medium text-teal-600 dark:text-teal-400 mb-6">
-                            {active.subtitle}
-                        </p>
+                </motion.div>
+              </AnimatePresence>
 
-                        {/* Desc */}
-                        <p className="text-slate-600 dark:text-slate-300 text-lg leading-relaxed mb-8">
-                            {active.desc}
-                        </p>
-
-                        {/* Buttons */}
-                        <div className="flex items-center gap-4">
-                            {active.preview ? (
-                                <a
-                                    href={active.preview}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex items-center gap-2 bg-slate-900 dark:bg-teal-500 text-white dark:text-slate-950 px-6 py-3 rounded-lg font-medium hover:bg-teal-600 dark:hover:bg-teal-400 transition-colors shadow-lg shadow-slate-900/20 dark:shadow-teal-500/20"
-                                >
-                                    Live Demo <ExternalLink size={18} />
-                                </a>
-                            ) : (
-                                <span className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 px-6 py-3 rounded-lg font-medium cursor-not-allowed">
-                                    Coming Soon <Layers size={18} />
-                                </span>
-                            )}
-
-                            <a
-                                href={active.repo}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="flex items-center gap-2 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-200 px-6 py-3 rounded-lg font-medium hover:border-slate-800 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
-                            >
-                                <Github size={18} /> Code
-                            </a>
-                        </div>
-
-                    </motion.div>
-                </AnimatePresence>
-
-                {/* Mobile Controls (Visible only on small screens) */}
-                <div className="flex md:hidden gap-4 mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-                    <button onClick={handlePrev} className="flex-1 py-3 rounded-lg bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">Previous</button>
-                    <button onClick={handleNext} className="flex-1 py-3 rounded-lg bg-slate-900 dark:bg-teal-500 text-white dark:text-slate-950 font-medium">Next</button>
-                </div>
+              {/* Mobile Navigation Controls */}
+              <div className="flex md:hidden gap-4 mt-8 pt-6 border-t border-slate-800/80">
+                <button 
+                  onClick={handlePrev} 
+                  className="flex-1 py-3 rounded-xl bg-slate-800/80 text-[#dedcff] font-medium hover:bg-slate-700/80"
+                >
+                  Previous
+                </button>
+                <button 
+                  onClick={handleNext} 
+                  className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#433bff] to-[#2f27ce] text-white font-medium"
+                >
+                  Next
+                </button>
+              </div>
 
             </div>
 
-        </div>
+          </div>
+        </Spotlight3DCard>
       </div>
     </section>
   );

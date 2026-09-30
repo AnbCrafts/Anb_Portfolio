@@ -8,7 +8,7 @@ const metrics = [
     label: "Projects Built",
     value: "12+",
     desc: "SaaS & Full-stack",
-    color: "from-teal-400 to-teal-600",
+    color: "from-[#38bdf8] to-[#433bff]",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ const metrics = [
     label: "Users Impacted",
     value: "12k+",
     desc: "Across all platforms",
-    color: "from-blue-400 to-blue-600",
+    color: "from-[#433bff] to-[#2f27ce]",
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const metrics = [
     label: "Avg. Load Time",
     value: "<0.5s",
     desc: "Optimized Performance",
-    color: "from-purple-400 to-purple-600",
+    color: "from-[#10b981] to-[#059669]",
   },
   {
     id: 4,
@@ -32,7 +32,7 @@ const metrics = [
     label: "Open Source",
     value: "14+",
     desc: "Contributions made",
-    color: "from-amber-400 to-orange-500",
+    color: "from-[#a78bfa] to-[#8b5cf6]",
   },
 ];
 
@@ -41,7 +41,7 @@ const container = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Stagger effect: cards appear one by one
+      staggerChildren: 0.15,
     },
   },
 };
@@ -53,10 +53,10 @@ const item = {
 
 export default function MetricsSection() {
   return (
-    <section className="w-full bg-white relative py-20 px-6">
+    <section className="w-full bg-[#050315] text-[#fbfbfe] relative py-20 px-6 overflow-hidden">
       
-      {/* Decorative background blur to bridge gap with Hero */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-20 bg-teal-50 blur-[100px] opacity-60 pointer-events-none" />
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-20 bg-[#433bff]/10 blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
         <motion.div
@@ -70,16 +70,17 @@ export default function MetricsSection() {
             <motion.div
               key={m.id}
               variants={item}
-              whileHover={{ y: -5 }} // Smooth lift effect
+              whileHover={{ y: -5 }}
               className="
                 group
                 relative 
-                bg-white 
+                bg-[#0b0f19]/90 
+                backdrop-blur-xl
                 rounded-2xl 
                 p-6 sm:p-8
-                border border-slate-100
-                shadow-lg shadow-slate-200/50
-                hover:shadow-2xl hover:shadow-teal-500/10 hover:border-teal-100
+                border border-slate-800/80
+                shadow-xl shadow-black/60
+                hover:shadow-2xl hover:shadow-[#433bff]/20 hover:border-[#38bdf8]/50
                 transition-all duration-300 ease-out
                 cursor-default
               "
@@ -99,19 +100,19 @@ export default function MetricsSection() {
 
               {/* Text Content */}
               <div className="space-y-1">
-                <h3 className="text-3xl sm:text-4xl font-bold text-slate-800 tracking-tight">
+                <h3 className="text-3xl sm:text-4xl font-extrabold text-[#fbfbfe] tracking-tight">
                   {m.value}
                 </h3>
-                <p className="text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                <p className="text-xs font-bold text-[#38bdf8] uppercase tracking-wider">
                   {m.label}
                 </p>
-                <p className="text-xs text-slate-400 font-medium pt-1 border-t border-slate-50 mt-3">
+                <p className="text-xs text-[#dedcff]/70 font-medium pt-2 border-t border-slate-800/60 mt-3">
                   {m.desc}
                 </p>
               </div>
 
-              {/* Decorative corner glow on hover */}
-              <div className="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-teal-50 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              {/* Corner Glow on Hover */}
+              <div className="absolute top-0 right-0 -mr-4 -mt-4 w-20 h-20 bg-[#433bff]/20 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </motion.div>
           ))}
         </motion.div>

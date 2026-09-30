@@ -1,170 +1,161 @@
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
-import {
-  Layout,
-  Server,
-  Database,
-  Terminal,
+import { 
+  Code, 
+  Server, 
+  Database, 
+  Wrench, 
+  Cpu, 
+  Cloud, 
+  Layers, 
+  Terminal, 
+  CheckCircle2 
 } from "lucide-react";
+import { TextScramble } from "./AnimatedText";
+import Spotlight3DCard from "./Spotlight3DCard";
 
+// Mock Fallback Skills mapped by category
 const skillGroupsFallback = [
   {
-    title: "Frontend Development",
-    icon: <Layout size={24} className="text-blue-500" />,
-    description: "Building responsive, accessible UIs",
-    skills: ["React.js", "Next.js", "Tailwind CSS", "TypeScript", "Redux"],
-    color: "blue",
+    category: "Frontend Development",
+    icon: Code,
+    color: "from-[#38bdf8] to-[#433bff]",
+    skills: [
+      { name: "React.js", level: 92 },
+      { name: "JavaScript (ES6+)", level: 90 },
+      { name: "TypeScript", level: 85 },
+      { name: "Tailwind CSS v4", level: 95 },
+      { name: "Redux Toolkit", level: 88 },
+      { name: "HTML5 / CSS3", level: 95 }
+    ]
   },
   {
-    title: "Backend Architecture",
-    icon: <Server size={24} className="text-emerald-500" />,
-    description: "Scalable APIs & server-side logic",
-    skills: ["Node.js", "Express.js", "REST APIs", "Authentication", "WebSockets"],
-    color: "emerald",
+    category: "Backend & Systems",
+    icon: Server,
+    color: "from-[#433bff] to-[#2f27ce]",
+    skills: [
+      { name: "Node.js", level: 88 },
+      { name: "Express.js", level: 90 },
+      { name: "C# / .NET 8", level: 82 },
+      { name: "RESTful APIs", level: 92 },
+      { name: "JWT & Multi-Factor Auth", level: 88 },
+      { name: "Microservices Logic", level: 80 }
+    ]
   },
   {
-    title: "Database Management",
-    icon: <Database size={24} className="text-purple-500" />,
-    description: "Optimized data storage & schemas",
-    skills: ["MongoDB", "PostgreSQL", "MySQL", "Prisma", "Redis"],
-    color: "purple",
+    category: "Database & Storage",
+    icon: Database,
+    color: "from-[#10b981] to-[#059669]",
+    skills: [
+      { name: "MongoDB & Mongoose", level: 90 },
+      { name: "PostgreSQL & SQL", level: 82 },
+      { name: "Redis Caching", level: 75 },
+      { name: "Cloudinary CDN", level: 88 }
+    ]
   },
   {
-    title: "DevOps & Tools",
-    icon: <Terminal size={24} className="text-orange-500" />,
-    description: "Version control & deployment",
-    skills: ["Docker", "Git/GitHub", "VPS Management", "Nginx", "PM2", "Postman", "Vercel", "Render"],
-    color: "orange",
-  },
+    category: "DevOps & Tools",
+    icon: Wrench,
+    color: "from-[#a78bfa] to-[#8b5cf6]",
+    skills: [
+      { name: "Git / GitHub Actions", level: 90 },
+      { name: "Docker Containerization", level: 78 },
+      { name: "Vercel & Render Deployments", level: 92 },
+      { name: "Monaco IDE & Postman", level: 88 }
+    ]
+  }
 ];
-
-const categoryConfigs = {
-  'Frontend': {
-    title: "Frontend Development",
-    icon: <Layout size={24} className="text-blue-500" />,
-    description: "Building responsive, accessible UIs",
-    color: "blue",
-  },
-  'Backend': {
-    title: "Backend Architecture",
-    icon: <Server size={24} className="text-emerald-500" />,
-    description: "Scalable APIs & server-side logic",
-    color: "emerald",
-  },
-  'Database': {
-    title: "Database Management",
-    icon: <Database size={24} className="text-purple-500" />,
-    description: "Optimized data storage & schemas",
-    color: "purple",
-  },
-  'DevOps & Tools': {
-    title: "DevOps & Tools",
-    icon: <Terminal size={24} className="text-orange-500" />,
-    description: "Version control & deployment",
-    color: "orange",
-  },
-};
-
-const colorMap = {
-  blue: "bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-900/60 hover:bg-blue-100 dark:hover:bg-blue-900/80",
-  emerald: "bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/80",
-  purple: "bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-100 dark:border-purple-900/60 hover:bg-purple-100 dark:hover:bg-purple-900/80",
-  orange: "bg-orange-50 dark:bg-orange-950/60 text-orange-700 dark:text-orange-300 border-orange-100 dark:border-orange-900/60 hover:bg-orange-100 dark:hover:bg-orange-900/80",
-};
 
 export default function SkillsSection() {
   const dbSkills = useSelector((state) => state.portfolio.skills);
 
-  // Group dynamic database skills (filtering out AWS and GCP)
-  const groupedDbSkills = Object.keys(categoryConfigs).map((cat) => {
-    const catSkills = dbSkills
-      .filter((s) => s.category === cat && s.name !== "AWS" && !s.name.includes("GCP") && !s.name.includes("Google Cloud"))
-      .sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0))
-      .map((s) => s.name);
-    return {
-      ...categoryConfigs[cat],
-      skills: catSkills,
-    };
-  }).filter((g) => g.skills.length > 0);
+  // Map database skills into categories if available
+  const categoriesMap = {};
+  if (dbSkills.length > 0) {
+    dbSkills.forEach((s) => {
+      const cat = s.category || "Other Core Skills";
+      if (!categoriesMap[cat]) {
+        categoriesMap[cat] = {
+          category: cat,
+          icon: Cpu,
+          color: "from-[#38bdf8] to-[#433bff]",
+          skills: []
+        };
+      }
+      categoriesMap[cat].skills.push({
+        name: s.name,
+        level: s.proficiency || s.level || 85
+      });
+    });
+  }
 
-  // Choose dynamic list or mock fallback
+  const groupedDbSkills = Object.values(categoriesMap);
   const skillGroups = groupedDbSkills.length > 0 ? groupedDbSkills : skillGroupsFallback;
 
   return (
-    <section id="skills" className="relative w-full py-16 md:py-20 px-6 overflow-hidden bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      {/* Subtle Background Decor */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-teal-50/50 dark:bg-teal-950/20 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2" />
+    <section id="skills" className="relative w-full py-20 px-6 overflow-hidden bg-[#050315] text-[#fbfbfe] transition-colors duration-300">
+      {/* Background Glows */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#433bff]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[450px] h-[450px] bg-[#38bdf8]/10 rounded-full blur-[140px] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* HEADER */}
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white tracking-tight"
+            className="text-3xl md:text-5xl font-extrabold text-[#fbfbfe] tracking-tight"
           >
-            Technical <span className="text-teal-600 dark:text-teal-400">Expertise</span>
+            Technical <span className="bg-gradient-to-r from-[#38bdf8] via-[#433bff] to-[#a78bfa] bg-clip-text text-transparent"><TextScramble text="Expertise" /></span>
           </motion.h2>
           <motion.p
              initial={{ opacity: 0, y: 10 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
              transition={{ delay: 0.1 }}
-             className="mt-4 text-slate-600 dark:text-slate-300 max-w-2xl mx-auto text-lg"
+             className="mt-4 text-[#dedcff]/80 max-w-2xl mx-auto text-lg"
           >
             A comprehensive toolset for building scalable, high-performance web applications from concept to deployment.
           </motion.p>
         </div>
 
-        {/* GRID LAYOUT */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {skillGroups.map((group, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="group relative bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-8 shadow-sm hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-black/50 transition-all duration-300"
-            >
-              {/* Header inside Card */}
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800 group-hover:bg-white dark:group-hover:bg-slate-700 group-hover:shadow-md transition-all duration-300 ring-1 ring-slate-100 dark:ring-slate-700">
-                    {group.icon}
+        {/* GRID LAYOUT WITH 3D SPOTLIGHT CARDS */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+          {skillGroups.map((group, idx) => {
+            const IconComponent = group.icon || Layers;
+            return (
+              <Spotlight3DCard
+                key={idx}
+                glowColor="rgba(67, 59, 255, 0.25)"
+                spotlightColor="rgba(56, 189, 248, 0.15)"
+                className="bg-[#0b0f19]/90 backdrop-blur-xl border border-slate-800/80 p-8 shadow-xl shadow-black/70"
+              >
+                {/* Card Header */}
+                <div className="flex items-center gap-4 mb-6">
+                  <div className={`p-3.5 rounded-xl bg-gradient-to-br ${group.color} text-white shadow-lg`}>
+                    <IconComponent size={24} />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100">
-                      {group.title}
-                    </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                      {group.description}
-                    </p>
+                    <h3 className="text-xl font-bold text-[#fbfbfe]">{group.category}</h3>
+                    <p className="text-xs font-semibold text-[#38bdf8]">{group.skills.length} Core Competencies</p>
                   </div>
                 </div>
-              </div>
 
-              {/* Divider */}
-              <div className="w-full h-px bg-slate-100 dark:bg-slate-800 mb-6 group-hover:bg-slate-200 dark:group-hover:bg-slate-700 transition-colors" />
+                <div className="w-full h-px bg-slate-800/80 mb-6" />
 
-              {/* Skills Tags */}
-              <div className="flex flex-wrap gap-2.5">
-                {group.skills.map((skill, i) => (
-                  <span
-                    key={i}
-                    className={`
-                      px-3.5 py-1.5 text-sm font-medium rounded-full border transition-colors cursor-default
-                      ${colorMap[group.color]}
-                    `}
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+                {/* Skills List Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  {group.skills.map((skill, sIdx) => (
+                    <div key={sIdx} className="flex items-center gap-2.5 p-2.5 rounded-lg bg-[#050315]/60 border border-slate-800/60">
+                      <CheckCircle2 size={16} className="text-[#38bdf8] shrink-0" />
+                      <span className="text-sm font-semibold text-[#dedcff]">{skill.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </Spotlight3DCard>
+            );
+          })}
         </div>
       </div>
     </section>

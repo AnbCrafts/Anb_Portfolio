@@ -1,8 +1,11 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, Send, MapPin, ArrowRight, Loader2 } from "lucide-react";
+import { Mail, Github, Linkedin, Send, MapPin, ArrowRight, Loader2, Sparkles } from "lucide-react";
 import emailjs from "@emailjs/browser";
 import toast, { Toaster } from "react-hot-toast";
+import Spotlight3DCard from "./Spotlight3DCard";
+import GlowBadge from "./GlowBadge";
+import { TextScramble } from "./AnimatedText";
 
 export default function ContactSection() {
   const formRef = useRef();
@@ -12,7 +15,6 @@ export default function ContactSection() {
     e.preventDefault();
     setIsSending(true);
 
-    // 1. Send Notification to YOU (The Portfolio Owner)
     const sendNotification = emailjs.sendForm(
       import.meta.env.VITE_EMAILJS_SERVICE_ID,
       import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
@@ -20,32 +22,32 @@ export default function ContactSection() {
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     );
 
-    // 2. Send Auto-Reply to THE VISITOR
     const sendAutoReply = emailjs.sendForm(
       import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_AUTOREPLY_EMAILJS_TEMPLATE_ID, // Use the new env variable
+      import.meta.env.VITE_AUTOREPLY_EMAILJS_TEMPLATE_ID,
       formRef.current,
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     );
 
-    // Wait for BOTH emails to send before showing success
     Promise.all([sendNotification, sendAutoReply])
       .then(() => {
         setIsSending(false);
-        toast.success("Message sent successfully! Check your inbox for a confirmation.", {
+        toast.success("Message sent successfully! Check your inbox for confirmation.", {
           style: {
-            background: "#134e4a", // Teal-900
-            color: "#fff",
+            background: "#0b0f19",
+            color: "#38bdf8",
+            border: "1px solid #433bff",
           },
         });
-        e.target.reset(); // Clear form
+        e.target.reset();
       })
       .catch((error) => {
         setIsSending(false);
         toast.error("Failed to send message. Please try again later.", {
           style: {
-            background: "#7f1d1d", // Red-900
-            color: "#fff",
+            background: "#0b0f19",
+            color: "#f87171",
+            border: "1px solid #ef4444",
           },
         });
         console.error("EmailJS Error:", error);
@@ -55,37 +57,37 @@ export default function ContactSection() {
   const socialLinks = [
     {
       name: "Email",
-      value: "anubhawg.cse.jisu22@gmail.com", 
+      value: "anubhawg.cse.jisu22@gmail.com",
       icon: <Mail size={20} />,
       href: "mailto:anubhawg.cse.jisu22@gmail.com",
-      color: "hover:border-teal-500 hover:text-teal-600 hover:bg-teal-50",
+      variant: "cyan",
     },
     {
       name: "GitHub",
       value: "github.com/AnbCrafts",
       icon: <Github size={20} />,
       href: "https://github.com/AnbCrafts",
-      color: "hover:border-slate-800 hover:text-slate-900 hover:bg-slate-50",
+      variant: "indigo",
     },
     {
       name: "LinkedIn",
       value: "linkedin.com/in/anubhaw",
       icon: <Linkedin size={20} />,
       href: "https://linkedin.com",
-      color: "hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50",
+      variant: "cyan",
     },
   ];
 
   return (
-    <section id="contact" className="relative w-full bg-white dark:bg-slate-900 py-16 md:py-20 px-6 lg:px-8 overflow-hidden transition-colors duration-300">
+    <section id="contact" className="relative w-full bg-[#050315] text-[#fbfbfe] py-20 px-6 lg:px-8 overflow-hidden transition-colors duration-300">
       
-      {/* Toast Notification Container */}
       <Toaster position="bottom-right" reverseOrder={false} />
 
-      {/* Abstract Background Decoration */}
-      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-teal-50/50 dark:bg-teal-950/20 rounded-full blur-[100px] -z-10" />
+      {/* Ambient Glows */}
+      <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[500px] h-[500px] bg-[#433bff]/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[450px] h-[450px] bg-[#38bdf8]/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center relative z-10">
 
         {/* --- LEFT: INFO & SOCIALS --- */}
         <motion.div
@@ -94,17 +96,24 @@ export default function ContactSection() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-           <div className="flex items-center gap-2 mb-6">
-             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-             <span className="text-sm font-semibold text-teal-600 dark:text-teal-400 tracking-wide uppercase">Available for work</span>
+          <div className="mb-6">
+            <GlowBadge variant="emerald">
+              <span className="relative flex h-2 w-2 mr-1 inline-block align-middle">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#34d399] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#34d399]"></span>
+              </span>
+              AVAILABLE FOR WORK
+            </GlowBadge>
           </div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 leading-tight">
+          <h2 className="text-4xl md:text-5xl font-extrabold text-[#fbfbfe] mb-6 leading-tight tracking-tight">
             Let's build something <br />
-            <span className="text-teal-600 dark:text-teal-400">extraordinary.</span>
+            <span className="bg-gradient-to-r from-[#38bdf8] via-[#433bff] to-[#a78bfa] bg-clip-text text-transparent">
+              <TextScramble text="extraordinary." />
+            </span>
           </h2>
 
-          <p className="text-slate-600 dark:text-slate-300 text-lg mb-10 leading-relaxed max-w-lg">
+          <p className="text-[#dedcff]/80 text-lg mb-10 leading-relaxed max-w-lg">
             Whether you have a project in mind, need a full-stack consultant, or just want to chat about tech—I'm actively looking for new opportunities.
           </p>
 
@@ -116,81 +125,83 @@ export default function ContactSection() {
                 href={link.href}
                 target="_blank"
                 rel="noreferrer"
-                className={`
-                   group flex items-center gap-4 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-sm transition-all duration-300
-                   ${link.color}
-                `}
+                className="group"
               >
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 group-hover:bg-white dark:group-hover:bg-slate-800 group-hover:scale-110 transition-transform">
-                  {link.icon}
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{link.name}</p>
-                  <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{link.value}</p>
-                </div>
-                <ArrowRight className="ml-auto w-5 h-5 text-slate-300 dark:text-slate-600 group-hover:text-current transition-colors opacity-0 group-hover:opacity-100" />
+                <Spotlight3DCard
+                  glowColor="rgba(67, 59, 255, 0.25)"
+                  spotlightColor="rgba(56, 189, 248, 0.15)"
+                  className="p-4 bg-[#0b0f19]/90 backdrop-blur-xl border border-slate-800/80 hover:border-[#38bdf8]/60 transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="p-3 rounded-xl bg-[#433bff]/15 text-[#38bdf8] border border-[#433bff]/30 group-hover:scale-110 transition-transform">
+                      {link.icon}
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-[#38bdf8] uppercase tracking-wider">{link.name}</p>
+                      <p className="text-sm font-semibold text-[#fbfbfe]">{link.value}</p>
+                    </div>
+                    <ArrowRight className="ml-auto w-5 h-5 text-[#dedcff]/50 group-hover:text-[#38bdf8] group-hover:translate-x-1 transition-all" />
+                  </div>
+                </Spotlight3DCard>
               </a>
             ))}
           </div>
           
-          <div className="mt-10 flex items-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
-             <MapPin size={16} /> Based in Kolkata, India • Open to Remote
+          <div className="mt-10 flex items-center gap-2 text-[#dedcff]/60 text-sm font-medium">
+             <MapPin size={16} className="text-[#38bdf8]" /> Based in Kolkata, India • Open to Remote
           </div>
         </motion.div>
 
-        {/* --- RIGHT: FORM CARD --- */}
+        {/* --- RIGHT: FORM CARD WITH 3D SPOTLIGHT --- */}
         <motion.div
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative"
         >
-           <div className="absolute inset-0 bg-teal-600 dark:bg-teal-500 rounded-2xl rotate-3 translate-x-2 translate-y-2 opacity-10" />
+          <Spotlight3DCard
+            glowColor="rgba(67, 59, 255, 0.35)"
+            spotlightColor="rgba(56, 189, 248, 0.2)"
+            className="p-8 md:p-10 bg-[#0b0f19]/90 backdrop-blur-2xl border border-slate-800/90 shadow-2xl shadow-black/80"
+          >
+            <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
+              
+              <h3 className="text-2xl font-extrabold text-[#fbfbfe]">Send a Message</h3>
 
-           {/* FORM START */}
-           <form 
-             ref={formRef} 
-             onSubmit={sendEmail} 
-             className="relative bg-white dark:bg-slate-950 border border-slate-100 dark:border-slate-800 p-8 md:p-10 rounded-2xl shadow-2xl shadow-slate-200/50 dark:shadow-black/60"
-           >
-             
-             <h3 className="text-2xl font-bold text-slate-800 dark:text-white mb-6">Send a message</h3>
-
-             <div className="space-y-5">
+              <div className="space-y-5">
                 {/* Name */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Name</label>
+                  <label className="block text-xs font-bold text-[#38bdf8] uppercase tracking-wider mb-2">Name</label>
                   <input
-                    name="user_name" // Required by EmailJS
+                    name="user_name"
                     type="text"
                     required
                     placeholder="John Doe"
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#050315]/80 border border-slate-800/80 text-[#fbfbfe] placeholder-slate-500 focus:outline-none focus:border-[#38bdf8] focus:shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-all duration-300"
                   />
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Email</label>
+                  <label className="block text-xs font-bold text-[#38bdf8] uppercase tracking-wider mb-2">Email</label>
                   <input
-                    name="user_email" // Required by EmailJS
+                    name="user_email"
                     type="email"
                     required
                     placeholder="john@example.com"
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#050315]/80 border border-slate-800/80 text-[#fbfbfe] placeholder-slate-500 focus:outline-none focus:border-[#38bdf8] focus:shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-all duration-300"
                   />
                 </div>
 
                 {/* Message */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">Message</label>
+                  <label className="block text-xs font-bold text-[#38bdf8] uppercase tracking-wider mb-2">Message</label>
                   <textarea
-                    name="message" // Required by EmailJS
+                    name="message"
                     required
                     rows="4"
                     placeholder="Tell me about your project..."
-                    className="w-full px-4 py-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white dark:focus:bg-slate-900 transition-all resize-none"
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#050315]/80 border border-slate-800/80 text-[#fbfbfe] placeholder-slate-500 focus:outline-none focus:border-[#38bdf8] focus:shadow-[0_0_20px_rgba(56,189,248,0.2)] transition-all duration-300 resize-none"
                   ></textarea>
                 </div>
 
@@ -201,8 +212,8 @@ export default function ContactSection() {
                   disabled={isSending}
                   type="submit"
                   className={`
-                    w-full font-bold py-4 rounded-xl shadow-lg flex items-center justify-center gap-2 transition-all
-                    ${isSending ? "bg-slate-400 dark:bg-slate-700 cursor-not-allowed" : "bg-slate-900 dark:bg-teal-500 text-white dark:text-slate-950 hover:bg-teal-600 dark:hover:bg-teal-400"}
+                    w-full font-bold py-4 rounded-xl shadow-lg shadow-[#433bff]/25 flex items-center justify-center gap-2 transition-all duration-300 cursor-pointer
+                    ${isSending ? "bg-slate-800 text-slate-500 cursor-not-allowed" : "bg-gradient-to-r from-[#433bff] to-[#2f27ce] text-white hover:from-[#38bdf8] hover:to-[#433bff] hover:shadow-[#38bdf8]/40"}
                   `}
                 >
                   {isSending ? (
@@ -211,8 +222,9 @@ export default function ContactSection() {
                     <>Send Message <Send size={18} /></>
                   )}
                 </motion.button>
-             </div>
-           </form>
+              </div>
+            </form>
+          </Spotlight3DCard>
         </motion.div>
 
       </div>

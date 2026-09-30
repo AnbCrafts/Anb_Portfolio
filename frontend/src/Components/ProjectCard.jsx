@@ -1,7 +1,8 @@
 import { motion, useInView } from "framer-motion";
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
+import { Github, ArrowUpRight } from "lucide-react";
 import { useRef, useState } from "react";
 import { assets } from "../assets/assets";
+import Spotlight3DCard from "./Spotlight3DCard";
 
 const getFallbackImage = (title, image) => {
   if (!title) return image || assets.anbPortfolio;
@@ -43,121 +44,124 @@ export default function ProjectCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ amount: 0.2, once: true }}
       transition={{ duration: 0.7, ease: "easeOut" }}
-      className="w-full max-w-6xl mx-auto mb-20 lg:mb-32"
+      className="w-full max-w-6xl mx-auto mb-16 lg:mb-24"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-        
-        {/* --- LEFT SIDE: VISUAL MOCKUP --- */}
-        <div 
-          className="group relative rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 p-2 sm:p-3 shadow-2xl shadow-slate-200/50 dark:shadow-black/60"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          {/* Mock Browser Header */}
-          <div className="flex items-center gap-1.5 mb-2 sm:mb-3 px-2">
-            <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-amber-400/80" />
-            <div className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
-            
-            {/* Optional Address Bar Visual */}
-            <div className="ml-2 w-full h-5 bg-white dark:bg-slate-900 rounded-md opacity-70 text-[10px] flex items-center px-2 text-slate-400 dark:text-slate-500 font-medium font-mono">
+      <Spotlight3DCard 
+        glowColor="rgba(67, 59, 255, 0.25)" 
+        spotlightColor="rgba(56, 189, 248, 0.15)"
+        className="p-6 md:p-10 bg-[#0b0f19]/80 backdrop-blur-xl border border-slate-800/80 shadow-2xl shadow-black/80 text-[#fbfbfe]"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          
+          {/* --- LEFT SIDE: VISUAL MOCKUP --- */}
+          <div 
+            className="group relative rounded-xl bg-[#050315] border border-slate-800/80 p-2 sm:p-3 shadow-2xl overflow-hidden"
+            onMouseEnter={() => setHover(true)}
+            onMouseLeave={() => setHover(false)}
+          >
+            {/* Mock Browser Header */}
+            <div className="flex items-center gap-1.5 mb-2.5 px-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+              
+              {/* Address Bar Visual */}
+              <div className="ml-2 w-full h-5 bg-[#0b0f19] border border-slate-800/80 rounded-md text-[10px] flex items-center px-2 text-[#dedcff]/50 font-mono">
                 {getHostname(previewLink)}
+              </div>
+            </div>
+
+            {/* Image/Video Container */}
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-[#050315] border border-slate-800/80">
+              <img
+                src={imgSrc}
+                alt={title}
+                onError={() => setImgSrc(getFallbackImage(title, image))}
+                className={`w-full h-full object-cover object-top transition-transform duration-700 ease-in-out ${
+                  hover ? "scale-105" : "scale-100"
+                } ${hover && video ? "opacity-0" : "opacity-100"}`}
+              />
+
+              {video && (
+                <video
+                  src={video}
+                  autoPlay={isInView}
+                  loop
+                  muted
+                  playsInline
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                    hover || isInView ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              )}
+              
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050315]/40 via-transparent to-transparent pointer-events-none" />
             </div>
           </div>
 
-          {/* Image/Video Container */}
-          <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-slate-900 border border-slate-300/50 dark:border-slate-800">
-            {/* Image */}
-            <img
-              src={imgSrc}
-              alt={title}
-              onError={() => setImgSrc(getFallbackImage(title, image))}
-              className={`w-full h-full object-cover object-top transition-transform duration-700 ease-in-out ${
-                hover ? "scale-105" : "scale-100"
-              } ${hover && video ? "opacity-0" : "opacity-100"}`}
-            />
-
-            {/* Video (Autoplays on View or Hover) */}
-            {video && (
-              <video
-                src={video}
-                autoPlay={isInView} // Auto-play when scrolled into view
-                loop
-                muted
-                playsInline
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                  hover || isInView ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            )}
-            
-            {/* Overlay Gradient (Optional: makes text readable if you put text over image) */}
-            <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-xl" />
-          </div>
-        </div>
-
-        {/* --- RIGHT SIDE: CONTENT --- */}
-        <div className="flex flex-col justify-center">
-            
-          {/* Meta Tag (e.g. "Featured Project" or Date) */}
-          {meta && (
-            <span className="text-teal-600 dark:text-teal-400 font-bold tracking-wider text-xs uppercase mb-4">
-              {meta}
-            </span>
-          )}
-
-          {/* Title */}
-          <h3 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 leading-tight">
-            {title}
-          </h3>
-
-          {/* Description */}
-          <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
-            {description}
-          </p>
-
-          {/* Tech Stack Pills */}
-          <div className="flex flex-wrap gap-2 mb-8">
-            {keywords.map((tag, i) => (
-              <span
-                key={i}
-                className="px-3 py-1.5 text-sm font-medium bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 rounded-full shadow-sm"
-              >
-                {tag}
+          {/* --- RIGHT SIDE: CONTENT --- */}
+          <div className="flex flex-col justify-center">
+              
+            {/* Meta Tag */}
+            {meta && (
+              <span className="text-[#38bdf8] font-bold tracking-wider text-xs uppercase mb-3">
+                {meta}
               </span>
-            ))}
-          </div>
+            )}
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-4">
-            {previewLink ? (
+            {/* Title */}
+            <h3 className="text-3xl md:text-4xl font-extrabold text-[#fbfbfe] mb-4 leading-tight">
+              {title}
+            </h3>
+
+            {/* Description */}
+            <p className="text-[#dedcff]/80 text-base leading-relaxed mb-6">
+              {description}
+            </p>
+
+            {/* Tech Stack Pills */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {keywords.map((tag, i) => (
+                <span
+                  key={i}
+                  className="px-3 py-1 text-xs font-semibold bg-[#433bff]/15 text-[#38bdf8] border border-[#433bff]/30 rounded-lg shadow-sm"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-4 flex-wrap">
+              {previewLink ? (
+                <a
+                  href={previewLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#433bff] to-[#2f27ce] text-white rounded-xl font-semibold hover:from-[#38bdf8] hover:to-[#433bff] transition-all duration-300 shadow-lg shadow-[#433bff]/25 hover:shadow-[#38bdf8]/40 hover:scale-[1.02]"
+                >
+                  Live Demo <ArrowUpRight size={18} />
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2 px-6 py-3 bg-slate-800/80 text-slate-500 rounded-xl font-semibold cursor-not-allowed border border-slate-700/50">
+                  In Progress
+                </span>
+              )}
+
               <a
-                href={previewLink}
+                href={codeLink}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 dark:bg-teal-500 text-white dark:text-slate-950 rounded-xl font-medium hover:bg-slate-800 dark:hover:bg-teal-400 hover:gap-3 transition-all duration-300 shadow-lg shadow-slate-900/20 dark:shadow-teal-500/20"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#0b0f19]/90 text-[#dedcff] border border-slate-700/80 rounded-xl font-semibold hover:bg-slate-800/80 hover:border-[#38bdf8] transition-all duration-300 hover:scale-[1.02]"
               >
-                Live Demo <ArrowUpRight size={18} />
+                <Github size={18} /> Source Code
               </a>
-            ) : (
-                <span className="inline-flex items-center gap-2 px-6 py-3 bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 rounded-xl font-medium cursor-not-allowed">
-                    In Progress
-                </span>
-            )}
+            </div>
 
-            <a
-              href={codeLink}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 rounded-xl font-medium hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all duration-300"
-            >
-              <Github size={20} /> Source Code
-            </a>
           </div>
 
         </div>
-
-      </div>
+      </Spotlight3DCard>
     </motion.div>
   );
 }
